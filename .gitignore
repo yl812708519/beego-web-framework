@@ -1,0 +1,6 @@
+
+
+pkg
+.idea
+*tmp
+*.DS_Store
