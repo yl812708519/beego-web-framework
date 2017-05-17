@@ -3,5 +3,5 @@
 pkg
 .idea
 *tmp
-meili-devops-backend
+src/meili-devops-backend/meili-devops-backend
 *.DS_Store
