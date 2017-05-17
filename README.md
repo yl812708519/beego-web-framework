@@ -7,22 +7,28 @@
 * dao: 数据层， 项目中使用models文件夹，（跟随beego创建规则）， 负责操作数据， 目前这层返回的直接是model实体， 并未包装
 
 ## 错误封装
-项目中定义异常(serviceException)、 错误(serviceError), 业务中的逻辑错误使用serviceException通知controller， panic(&serviceException) 不会中断进程， 框架会捕获panic， 如果panic的参数可以转换为 serviceException, 会将http status 设为400 并返回相应的error message json。 serviceError目前未做其他的封装与使用
+项目中定义异常(serviceException)、 错误(serviceError)  
+业务中的逻辑错误使用panic(&serviceException) 不会中断进程， 框架会捕获panic  
+如果panic的参数可以转换为 serviceException, 会将http status 设为400 并返回相应的error message json。 serviceError目前未做其他的封装与使用
 
 
 ## config
-配置同beego, 增加orm data source url 的相关配置
+配置同beego, 增加orm data source url 的相关配置  
 
 
 
 ## orm
-model 定义的init 需要 调用orm.Register(new(model))， 否则无法使用高级查询
-orm 部分未经过测试。。。。
+model 定义的init 需要 调用orm.Register(new(model))， 否则无法使用高级查询  
+model 定义， 最好写上对应的column  
+model 不使用自动建表功能  
+model 中bool类型在表中定义为tinyint(1) 0:false   1:true  orm会转换
+表明使用复数名词， model不固定最好使用单数名词， 实现tableName 方法返回真正的表名  
+orm 部分未经过测试。。。。  
 
 
 # 项目依赖
 项目依赖使用golang 自带vendor管理
-* 编译之前请设置  export GO15VENDOREXPERIMENT=1
+> 编译之前请设置  export GO15VENDOREXPERIMENT=1
 
 
 

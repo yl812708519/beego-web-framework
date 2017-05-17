@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"meili-devops-backend/services"
+	"services"
 )
 // 示例代码
 type HelloController struct {

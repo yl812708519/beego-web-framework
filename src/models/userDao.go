@@ -12,6 +12,7 @@ func init() {
 type User struct{
 	Id int64            `orm:"column(id)"`
 	Name string         `orm:"column(name)"`
+	IsGay bool          `orm:"column(is_gay)"`
 }
 
 func (u *User) TableName() string {

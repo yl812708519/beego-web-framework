@@ -1,7 +1,7 @@
 package services
 
 import (
-	"meili-devops-backend/models"
+	"models"
 )
 // 示例代码 service 无状态 不保存数据，只做逻辑
 type UserService struct {

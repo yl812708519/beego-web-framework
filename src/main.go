@@ -1,17 +1,17 @@
 package main
 
 import (
-	_ "meili-devops-backend/routers"
+	_ "routers"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"fmt"
 	"github.com/astaxie/beego/logs"
 	"runtime"
-	"meili-devops-backend/common"
+	"common"
 	"strconv"
 
-	"meili-devops-backend/models"
+	"models"
 )
 
 func main() {

@@ -8,7 +8,7 @@
 package routers
 
 import (
-	"meili-devops-backend/controllers"
+	"controllers"
 	"github.com/astaxie/beego"
 )
 
@@ -29,7 +29,13 @@ func init() {
 
 	// namespace 感觉不易读。结构有些混乱，通过url不能快速找到对应的方法
 	//so
+	// beego.Router("/simple",&SimpleController{},"get:GetFunc;post:PostFunc")   方法映射
+	//
+
 	beego.Router("throw",&controllers.HelloController{})
+
+
+
 
 
 
