@@ -3,5 +3,9 @@
 pkg
 .idea
 *tmp
+# 注释掉二进制文件
 src/src
 *.DS_Store
+/src/routers/*
+# 屏蔽dev模式生成的注解路由
+!/src/routers/router.go

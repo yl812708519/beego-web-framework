@@ -71,5 +71,6 @@ func main() {
 
 	// 增加初始化 orm操作对象的钩子函数， 这个对象初始化之前要保证 model注册完
 	beego.AddAPPStartHook(models.OrmInitHockFunc)
+
 	beego.Run()
 }

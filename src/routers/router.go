@@ -5,6 +5,7 @@
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+
 package routers
 
 import (
@@ -26,15 +27,20 @@ func init() {
 	//	),
 	//)
 	//beego.AddNamespace(ns)
-
-	// namespace 感觉不易读。结构有些混乱，通过url不能快速找到对应的方法
-	//so
-	// beego.Router("/simple",&SimpleController{},"get:GetFunc;post:PostFunc")   方法映射
-	//
-
-	beego.Router("throw",&controllers.HelloController{})
+	// 使用自动化文档一定要使用 namespace 的方式
 
 
+
+	ns := beego.NewNamespace("/api",
+		beego.NSNamespace("/test",
+			beego.NSInclude(&controllers.HelloController{}),
+
+
+		),
+	)
+
+
+	beego.AddNamespace(ns)
 
 
 

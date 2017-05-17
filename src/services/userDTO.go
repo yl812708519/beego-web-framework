@@ -3,8 +3,9 @@ package services
 
 // 示例代码
 type UserDTO struct {
-	id int64
-	name string
+	Id int64
+	Name string
+	Param string
 }
 
 
