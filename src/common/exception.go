@@ -31,10 +31,10 @@ type ServiceError struct {
 	error
 }
 
-func NewServiceException(exceptionCode int) *ServiceException {
+func NewServiceException(exceptionCode int) ServiceException {
 	ecStr:= strconv.Itoa(exceptionCode)
 	message := ExceptionConfig.String(ecStr)
-	return &ServiceException{exceptionCode, message}
+	return ServiceException{exceptionCode, message}
 }
 
 func (e ServiceException) Json() []byte {

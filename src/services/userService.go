@@ -8,11 +8,9 @@ type UserService struct {
 	userDao models.UserDao
 }
 
-func (s *UserService) FindById(id int64) *UserDTO {
-	user := s.userDao.GetNewModel()
-	user.Id = id
-	models.FindOne(user)
-	return &UserDTO{Id:user.Id, Name:user.Name}
+func (s UserService) FindById(id int64) UserDTO {
+	user := s.userDao.FindOne(id)
+	return UserDTO{Id:user.Id, Name:user.Name}
 }
 
 

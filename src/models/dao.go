@@ -28,29 +28,32 @@ func init() {
 
 }
 
-
 func OrmInitHockFunc() error{
 	ormer = orm.NewOrm()
 	return nil
 }
 
 
-func Insert(m interface{}) interface{}{
-	id , err := ormer.Insert(m)
+func insert(m interface{}) interface{}{
+	_ , err := ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
 	}
-	return id
+	return m
 
 }
 
-func FindOne(m interface{}) {
+func findOne(id int64, m interface{}) interface{} {
+	qs := ormer.QueryTable(m)
 
-	err := ormer.Read(m)
+	qs.Filter("id", id)
+	err := qs.One(m)
 	if err != nil {
 		log.Panicln(err)
 	}
+	return m
 }
+
 
 
 

@@ -24,13 +24,13 @@ func main() {
 	// 保证原有处理逻辑不变， 仅增加了处理serviceException的方法
 	beego.BConfig.RecoverFunc = func(ctx *context.Context) {
 		if err := recover(); err != nil {
+
 			if err == beego.ErrAbort {
 				return
 			}
 			if !beego.BConfig.RecoverPanic {
 				panic(err)
 			}
-
 			// 新加逻辑， 如果可以转换为serviceException
 			se, cok := err.(common.ServiceException)
 			if cok {
@@ -38,7 +38,6 @@ func main() {
 				ctx.Output.Body(se.Json())
 				return
 			}
-
 			// 修改 私有方法调用为 公共方法   转换数据
 			if beego.BConfig.EnableErrorsShow {
 				if _, ok := beego.ErrorMaps[fmt.Sprint(err)]; ok {

@@ -15,7 +15,7 @@ type User struct{
 	IsGay bool          `orm:"column(is_gay)"`
 }
 
-func (u *User) TableName() string {
+func (u User) TableName() string {
 	return "users"
 }
 
@@ -24,8 +24,14 @@ func (u *User) TableName() string {
 type UserDao struct {
 }
 
-func (d *UserDao) GetNewModel() *User{
+func (d UserDao) GetNewModel() *User{
 	return new(User)
+}
+
+func (d UserDao) FindOne(id int64) User{
+	u := User{}
+	findOne(id, &u)
+	return u
 }
 
 

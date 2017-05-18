@@ -15,12 +15,12 @@
     },
     "basePath": "/api",
     "paths": {
-        "/test/throw/{key}": {
+        "/test/throw/{id}": {
             "get": {
                 "tags": [
                     "test"
                 ],
-                "description": "get all the staticblock by key",
+                "description": "get all the staticblock by id",
                 "operationId": "HelloController.getStaticBlock",
                 "parameters": [
                     {
