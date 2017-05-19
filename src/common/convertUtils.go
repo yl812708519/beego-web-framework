@@ -40,6 +40,7 @@ func Convert(o interface{}, target interface{}) interface{} {
 				case reflect.Bool:
 					structFieldValue.SetBool(value.(bool))
 				case reflect.Int64:
+					structFieldValue.SetInt(value.(int64))
 				case reflect.Int:
 					structFieldValue.SetInt(int64(value.(int)))
 			}

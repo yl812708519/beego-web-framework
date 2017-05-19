@@ -17,3 +17,6 @@ func (s ServerService) FindById(id int64) ServerDTO{
 	common.Convert(server, serverDTO)
 	return *serverDTO
 }
+
+
+
