@@ -38,6 +38,12 @@ func main() {
 				ctx.Output.Body(se.Json())
 				return
 			}
+			serviceError, cok := err.(common.ServiceError)
+			if cok {
+				ctx.Output.SetStatus(500)
+				ctx.Output.Body(serviceError.Json())
+				return
+			}
 			// 修改 私有方法调用为 公共方法   转换数据
 			if beego.BConfig.EnableErrorsShow {
 				if _, ok := beego.ErrorMaps[fmt.Sprint(err)]; ok {

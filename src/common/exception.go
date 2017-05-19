@@ -28,7 +28,6 @@ type ServiceException struct {
 type ServiceError struct {
 	Code int
 	Message string
-	error
 }
 
 func NewServiceException(exceptionCode int) ServiceException {
@@ -44,7 +43,6 @@ func (e ServiceException) Json() []byte {
 		panic("convert error")
 	}
 	return content
-
 }
 
 func (e ServiceException) Error() string{
@@ -52,7 +50,20 @@ func (e ServiceException) Error() string{
 	return string(content)
 }
 
+func NewServiceError(exceptionCode int) ServiceError {
+	ecStr:= strconv.Itoa(exceptionCode)
+	message := ExceptionConfig.String(ecStr)
+	return ServiceError{exceptionCode, message}
+}
 
+func (e ServiceError) Json() []byte {
+
+	content, err := json.Marshal(e)
+	if err != nil {
+		panic("convert error")
+	}
+	return content
+}
 
 
 

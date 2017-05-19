@@ -6,6 +6,11 @@
 * service： 服务层， 处理业务逻辑， 返回DTO对象给controller层
 * dao: 数据层， 项目中使用models文件夹，（跟随beego创建规则）， 负责操作数据， 目前这层返回的直接是model实体， 并未包装
 
+
+##baseController
+这里封装了部分C层常用的方法， 有些与框架的基类重名， 重名方法使用小写字母， 反正是同包使用
+
+
 ## 错误封装
 项目中定义异常(serviceException)、 错误(serviceError)  
 业务中的逻辑错误使用panic(&serviceException) 不会中断进程， 框架会捕获panic  
@@ -14,7 +19,6 @@
 
 ## config
 配置同beego, 增加orm data source url 的相关配置  
-
 
 
 ## orm

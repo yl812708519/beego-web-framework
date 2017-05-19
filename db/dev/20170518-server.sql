@@ -1,4 +1,6 @@
+
 -- Create syntax for TABLE 'server_disks'
+-- 磁盘路径 关联表
 CREATE TABLE `server_disks` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `server_id` bigint(20) unsigned NOT NULL,
@@ -10,6 +12,7 @@ CREATE TABLE `server_disks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Create syntax for TABLE 'server_users'
+-- 服务器用户信息 关联表
 CREATE TABLE `server_users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `server_id` bigint(20) unsigned NOT NULL,
@@ -34,7 +37,7 @@ CREATE TABLE `servers` (
   `extranet_ip` varchar(30) NOT NULL DEFAULT '' COMMENT '外网ip',
   `remark` varchar(255) NOT NULL DEFAULT '',
   `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '逻辑删除字段',
-  `creator_id` bigint(20) unsigned NOT NULL COMMENT '创建人',
+  `updater_id` bigint(20) unsigned NOT NULL COMMENT '创建人',
   `created_at` bigint(20) unsigned NOT NULL,
   `updated_at` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)

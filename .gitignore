@@ -7,5 +7,6 @@ pkg
 src/src
 *.DS_Store
 /src/routers/*
+/src/swagger
 # 屏蔽dev模式生成的注解路由
 !/src/routers/router.go
