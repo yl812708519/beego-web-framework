@@ -31,14 +31,17 @@ func (u Server) TableName() string {
 
 
 type ServerDao struct {
-
+	BaseFunc
 }
 
 func (d ServerDao) FindOne(id int64) Server {
 	server := Server{}
-	findOne(id, &server)
+	d.findOne(id, &server)
 	return server
 }
 
+func (d ServerDao) Insert(server Server) {
+	d.insert(&server)
+}
 
 

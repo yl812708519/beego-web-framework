@@ -34,7 +34,13 @@ func OrmInitHockFunc() error{
 }
 
 
-func insert(m interface{}) interface{}{
+// 基础方法类， 减少一些代码量
+type BaseFunc struct {
+
+}
+
+
+func (b *BaseFunc) insert(m interface{}) interface{}{
 	_ , err := ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
@@ -43,7 +49,7 @@ func insert(m interface{}) interface{}{
 
 }
 
-func findOne(id int64, m interface{}) interface{} {
+func (b *BaseFunc) findOne(id int64, m interface{}) interface{} {
 	qs := ormer.QueryTable(m)
 
 	qs.Filter("id", id)

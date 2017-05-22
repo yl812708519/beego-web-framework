@@ -31,5 +31,10 @@ func (b BaseController) renderJSON(object interface{}){
 	b.ServeJSON()
 }
 
+// post 接口返回成功结果
+func (b BaseController) renderSuccess() {
+	b.Data["json"] = map[string] string{"status": "success"}
+}
+
 
 

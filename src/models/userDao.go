@@ -22,15 +22,16 @@ func (u User) TableName() string {
 
 
 type UserDao struct {
+	BaseFunc
 }
 
-func (d UserDao) GetNewModel() *User{
+func (this UserDao) GetNewModel() *User{
 	return new(User)
 }
 
-func (d UserDao) FindOne(id int64) User{
+func (this UserDao) FindOne(id int64) User{
 	u := User{}
-	findOne(id, &u)
+	this.findOne(id, &u)
 	return u
 }
 
