@@ -25,9 +25,9 @@ type ServerDiskDao struct {
 	BaseFunc
 }
 
-func (this ServerDiskDao) InsertAll(disks []ServerDisk) {
-	this.insertAll(disks)
-}
+//func (this ServerDiskDao) InsertAll(disks []ServerDisk) {
+//	this.insertAll(disks)
+//}
 
 func (this ServerDiskDao) FindByServerIds(ids []int64) []ServerDisk {
 	qs := ormer.QueryTable("server_disks")

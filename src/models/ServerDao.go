@@ -37,17 +37,17 @@ func (u Server) TableName() string {
 type ServerDao struct {
 	BaseFunc
 }
-
-func (d ServerDao) FindOne(id int64) Server {
-	server := Server{}
-	d.findOne(id, &server)
-	return server
-}
-
-func (d ServerDao) Insert(server *Server) {
-	id := d.insert(server)
-	server.Id = id
-}
+//
+//func (d ServerDao) FindOne(id int64) Server {
+//	server := Server{}
+//	d.findOne(id, &server)
+//	return server
+//}
+//
+//func (d ServerDao) Insert(server *Server) {
+//	id := d.insert(server)
+//	server.Id = id
+//}
 
 func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
 	server := Server{}
@@ -73,10 +73,6 @@ func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pa
 	var servers []Server
 	qs.All(&servers)
 	return servers, count
-
-
-
-
 
 }
 

@@ -35,10 +35,6 @@ func init() {
 		beego.NSNamespace("/devops",
 			beego.NSInclude(&controllers.ServerController{}),
 		),
-		beego.NSNamespace("/test",
-			beego.NSInclude(&controllers.HelloController{}),
-
-		),
 
 	)
 

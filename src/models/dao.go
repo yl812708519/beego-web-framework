@@ -50,7 +50,7 @@ func (b *BaseFunc) calculateOffset(page, pageSize int) int {
 	return (page - 1) * pageSize
 }
 
-func (b *BaseFunc) insert(m interface{}) int64{
+func (b *BaseFunc) Insert(m interface{}) int64{
 	id , err := ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
@@ -59,7 +59,7 @@ func (b *BaseFunc) insert(m interface{}) int64{
 
 }
 
-func (b *BaseFunc) insertAll(m interface{}){
+func (b *BaseFunc) InsertAll(m interface{}){
 	_ , err := ormer.InsertMulti(5, m)
 	if err != nil {
 		log.Panicln(err)
@@ -67,8 +67,8 @@ func (b *BaseFunc) insertAll(m interface{}){
 }
 
 
-func (b *BaseFunc) findOne(id int64, m interface{}) interface{} {
-	qs := ormer.QueryTable(m).Filter("id", id)
+func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
+	qs := ormer.QueryTable(m).Filter("Id", id)
 	err := qs.One(m)
 	if err == orm.ErrNoRows {
 		// 没有找到记录
@@ -77,11 +77,11 @@ func (b *BaseFunc) findOne(id int64, m interface{}) interface{} {
 	return m
 }
 
-func (b *BaseFunc) remove(id int64, m interface{}){
+func (b *BaseFunc) Remove(id int64, m interface{}){
 	mType := reflect.TypeOf(m)
 	if _, ok:=mType.FieldByName(isDeleteField); ok{
 		// 有is_deleted字段
-		b.findOne(id, m)
+		b.FindOne(id, m)
 		mValue := reflect.ValueOf(m).FieldByName(isDeleteField)
 		mValue.SetBool(true)
 		ormer.Update(m, isDeleteField)

@@ -24,10 +24,10 @@ func (u ServerUser) TableName() string {
 type ServerUserDao struct {
 	BaseFunc
 }
-
-func (this ServerUserDao) InsertAll(users []ServerUser) {
-	this.insertAll(users)
-}
+//
+//func (this ServerUserDao) InsertAll(users []ServerUser) {
+//	this.insertAll(users)
+//}
 
 
 func (this ServerUserDao) FindByServerIds(ids []int64) []ServerUser {

@@ -15,10 +15,10 @@ type ServerService struct {
 
 
 func (this ServerService) FindById(id int64) ServerDTO{
-
-	server := this.serverDao.FindOne(id)
+	server := &models.Server{}
+	this.serverDao.FindOne(id, server)
 	serverDTO := &ServerDTO{}
-	common.Convert(server, serverDTO)
+	common.Convert(*server, serverDTO)
 	return *serverDTO
 }
 
