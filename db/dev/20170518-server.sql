@@ -26,7 +26,7 @@ CREATE TABLE `server_users` (
 -- Create syntax for TABLE 'servers'
 CREATE TABLE `servers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `server_id` varchar(20) NOT NULL DEFAULT '' COMMENT '生成的唯一id字符串',
+  `server_id` varchar(36) NOT NULL DEFAULT '' COMMENT '生成的唯一id字符串',
   `tag` varchar(100) NOT NULL DEFAULT '' COMMENT '名称/标签',
   `application` varchar(100) DEFAULT '' COMMENT '应用',
   `env` varchar(30) DEFAULT '' COMMENT '环境',

@@ -28,6 +28,7 @@ func (this ServerService) Create(request ServerDTO) {
 	var disks []models.ServerDisk
 	server := &models.Server{}
 	common.Convert(request, server)
+	server.ServerId = common.GenUUID()
 	this.serverDao.Insert(server)
 
 	for _, u := range request.Users {
