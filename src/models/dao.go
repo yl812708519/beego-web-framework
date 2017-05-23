@@ -46,6 +46,10 @@ type BaseFunc struct {
 
 }
 
+func (this BaseFunc) initQuerySetter(tableName string) orm.QuerySeter {
+	return ormer.QueryTable(tableName)
+}
+
 func (b *BaseFunc) calculateOffset(page, pageSize int) int {
 	return (page - 1) * pageSize
 }
@@ -79,10 +83,10 @@ func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
 
 func (b *BaseFunc) Remove(id int64, m interface{}){
 	mType := reflect.TypeOf(m)
-	if _, ok:=mType.FieldByName(isDeleteField); ok{
+	if _, ok:=mType.Elem().FieldByName(isDeleteField); ok{
 		// 有is_deleted字段
 		b.FindOne(id, m)
-		mValue := reflect.ValueOf(m).FieldByName(isDeleteField)
+		mValue := reflect.ValueOf(m).Elem().FieldByName(isDeleteField)
 		mValue.SetBool(true)
 		ormer.Update(m, isDeleteField)
 	} else {
@@ -90,8 +94,5 @@ func (b *BaseFunc) Remove(id int64, m interface{}){
 	}
 
 }
-
-
-
 
 

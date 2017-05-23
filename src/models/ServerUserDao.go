@@ -38,3 +38,8 @@ func (this ServerUserDao) FindByServerIds(ids []int64) []ServerUser {
 	return users
 }
 
+func (this ServerUserDao) DeleteByServerId(id int64) {
+	qs := this.initQuerySetter("server_users").Filter("ServerId", id)
+	qs.Update(orm.Params{"IsDeleted": true})
+}
+

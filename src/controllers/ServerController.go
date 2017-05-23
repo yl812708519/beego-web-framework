@@ -98,5 +98,21 @@ func (this *ServerController) FindList() {
 }
 
 
+// @Title delete server
+// @Description 删除server信息
+// @Param   id     path    int64  true        "server id"
+// @Success 200 {status: "success"}
+// @Failure 400 400 service exception
+// @router /servers/:id [delete]
+func (this *ServerController) Remove() {
+	id, err := this.GetInt64(":id")
+	if err != nil{
+		panic(common.NewServiceException(20003))
+	}
+	this.serverService.Remove(id)
+	this.renderSuccess()
+}
+
+
 
 

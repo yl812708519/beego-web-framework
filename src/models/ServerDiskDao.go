@@ -30,10 +30,15 @@ type ServerDiskDao struct {
 //}
 
 func (this ServerDiskDao) FindByServerIds(ids []int64) []ServerDisk {
-	qs := ormer.QueryTable("server_disks")
+	qs := this.initQuerySetter("server_disks")
 	qs.Filter("ServerId__in", ids)
 	var disks []ServerDisk
 	qs.All(&disks)
 	return disks
 }
 
+
+func (this ServerDiskDao) DeleteByServerId(id int64) {
+	qs := this.initQuerySetter("server_disks").Filter("ServerId", id)
+	qs.Update(orm.Params{"IsDeleted": true})
+}

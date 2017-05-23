@@ -79,9 +79,10 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 }
 
 
-func (this ServerService) remove(id int64){
-
-
+func (this ServerService) Remove(id int64){
+	this.serverDao.Remove(id, &models.Server{})
+	this.serverDiskDao.DeleteByServerId(id)
+	this.serverUserDao.DeleteByServerId(id)
 
 }
 
