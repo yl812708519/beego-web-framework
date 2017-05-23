@@ -79,5 +79,10 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 }
 
 
+func (this ServerService) remove(id int64){
+
+
+
+}
 
 

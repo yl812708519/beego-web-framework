@@ -7,11 +7,18 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"reflect"
+	"common"
 )
 
 var (
 	ormer orm.Ormer
 	regModels map[string] reflect.Type
+)
+
+const (
+	isDeleteField = "IsDeleted"
+	createdAtField = "CreatedAt"
+	updatedAtField = "CreatedAt"
 )
 
 func init() {
@@ -61,15 +68,29 @@ func (b *BaseFunc) insertAll(m interface{}){
 
 
 func (b *BaseFunc) findOne(id int64, m interface{}) interface{} {
-	qs := ormer.QueryTable(m)
-
-	qs.Filter("id", id)
+	qs := ormer.QueryTable(m).Filter("id", id)
 	err := qs.One(m)
-	if err != nil {
-		log.Panicln(err)
+	if err == orm.ErrNoRows {
+		// 没有找到记录
+		panic(common.NewServiceException(20001))
 	}
 	return m
 }
+
+func (b *BaseFunc) remove(id int64, m interface{}){
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.FieldByName(isDeleteField); ok{
+		// 有is_deleted字段
+		b.findOne(id, m)
+		mValue := reflect.ValueOf(m).FieldByName(isDeleteField)
+		mValue.SetBool(true)
+		ormer.Update(m, isDeleteField)
+	} else {
+		ormer.QueryTable(m).Filter("Id", id).Delete()
+	}
+
+}
+
 
 
 

@@ -53,24 +53,23 @@ func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pa
 	server := Server{}
 	qs := ormer.QueryTable(&server)
 	if len(application) > 0 {
-		qs.Filter("Application", application)
+		qs = qs.Filter("Application", application)
 	}
 	if len(engineRoom) > 0 {
-		qs.Filter("EngineRoom", engineRoom)
+		qs = qs.Filter("EngineRoom", engineRoom)
 	}
 	if len(env) > 0 {
-		qs.Filter("Env", env)
+		qs = qs.Filter("Env", env)
 	}
 	if len(ip) > 0 {
-		qs.Filter("Ip", ip)
+		qs = qs.Filter("Ip", ip)
 	}
 	count, err := qs.Count()
 	if err != nil {
 		log.Println(err)
 	}
 
-	qs.Limit(pageSize)
-	qs.Offset(this.calculateOffset(page, pageSize))
+	qs = qs.Limit(pageSize).Offset(this.calculateOffset(page, pageSize))
 	var servers []Server
 	qs.All(&servers)
 	return servers, count
