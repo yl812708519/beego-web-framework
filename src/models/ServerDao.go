@@ -1,6 +1,9 @@
 package models
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+	"log"
+)
 
 func init() {
 	orm.RegisterModel(new(Server))
@@ -19,6 +22,7 @@ type Server struct{
 	ExtranetIp string       `orm:"column(extranet_ip)"`
 	Remark string           `orm:"column(remark)"`
 	IsDeleted bool          `orm:"column(is_deleted)"`
+	CreatorId int64         `orm:"column(creator_id)"`
 	UpdaterId int64         `orm:"column(updater_id)"`
 	CreatedAt int64         `orm:"column(created_at)"`
 	UpdatedAt int64         `orm:"column(updated_at)"`
@@ -40,8 +44,42 @@ func (d ServerDao) FindOne(id int64) Server {
 	return server
 }
 
-func (d ServerDao) Insert(server Server) {
-	d.insert(&server)
+func (d ServerDao) Insert(server *Server) {
+	id := d.insert(server)
+	server.Id = id
 }
+
+func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
+	server := Server{}
+	qs := ormer.QueryTable(&server)
+	if len(application) > 0 {
+		qs.Filter("Application", application)
+	}
+	if len(engineRoom) > 0 {
+		qs.Filter("EngineRoom", engineRoom)
+	}
+	if len(env) > 0 {
+		qs.Filter("Env", env)
+	}
+	if len(ip) > 0 {
+		qs.Filter("Ip", ip)
+	}
+	count, err := qs.Count()
+	if err != nil {
+		log.Println(err)
+	}
+
+	qs.Limit(pageSize)
+	qs.Offset(this.calculateOffset(page, pageSize))
+	var servers []Server
+	qs.All(&servers)
+	return servers, count
+
+
+
+
+
+}
+
 
 

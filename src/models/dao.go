@@ -39,15 +39,26 @@ type BaseFunc struct {
 
 }
 
+func (b *BaseFunc) calculateOffset(page, pageSize int) int {
+	return (page - 1) * pageSize
+}
 
-func (b *BaseFunc) insert(m interface{}) interface{}{
-	_ , err := ormer.Insert(m)
+func (b *BaseFunc) insert(m interface{}) int64{
+	id , err := ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
 	}
-	return m
+	return id
 
 }
+
+func (b *BaseFunc) insertAll(m interface{}){
+	_ , err := ormer.InsertMulti(5, m)
+	if err != nil {
+		log.Panicln(err)
+	}
+}
+
 
 func (b *BaseFunc) findOne(id int64, m interface{}) interface{} {
 	qs := ormer.QueryTable(m)

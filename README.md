@@ -10,6 +10,12 @@
 ##baseController
 这里封装了部分C层常用的方法， 有些与框架的基类重名， 重名方法使用小写字母， 反正是同包使用
 
+## 参数处理
+框架提供的传入参数处理机制貌似不完善， 无法parse 嵌套对象(无法测试尚不明了)
+使用解析json的形式可以达到要求，性能应该不是最优解
+form-data、x-www-form-urlencode 可以使用this.Ctx.Input() 接收
+application/json 只能使用 this.Ctx.Input.RequestBody()获取并解析
+
 
 ## 错误封装
 项目中定义异常(serviceException)、 错误(serviceError)  
