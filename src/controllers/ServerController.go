@@ -58,6 +58,31 @@ func (this *ServerController) Create() {
 	this.renderSuccess()
 }
 
+// @Title create server
+// @Description
+// @Param    id             formData    int64           true        "update"
+// @Param    tag            formData    string          true        "名称标签"
+// @Param    env            formData    string          false        "环境"
+// @Param    engineRoom     formData    string          true        "机房"
+// @Param    core           formData    int             true        "核心数"
+// @Param    memory         formData    int             true        "内存数"
+// @Param    intranetIp     formData    string          false        "内网ip"
+// @Param    extranetIp     formData    string          false        "外网ip"
+// @Param    remark         formData    string          false        "备注"
+// @Param    users          formData    []server.User   true         "用户"
+// @Param    disks          formData    []server.Disk   true         "磁盘"
+// @Success 200 {status: success}
+// @Failure 400 service exception
+// @router /servers/:id [put]
+func (this *ServerController) Update() {
+	serverRequest := &server.ServerDTO{}
+	this.parseJsonRequest(serverRequest)
+	serverRequest.Id, _ = this.GetInt64(":id")
+	this.serverService.Update(*serverRequest)
+
+	this.renderSuccess()
+}
+
 
 
 // @Title find server
@@ -127,9 +152,10 @@ func (this *ServerController) Remove() {
 	this.renderSuccess()
 }
 
+
 // @Title delete server
 // @Description 删除server信息
-// @Param   ids    formData    []int64    true        "server ids"
+// @Param   ids    formData    []int64    true        "json like this: {"ids": [2,3,4,5,6]}"
 // @Success 200 {status: "success"}
 // @Failure 400 400 service exception
 // @router /servers [delete]

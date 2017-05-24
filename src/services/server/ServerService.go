@@ -4,6 +4,7 @@ import (
 	"models"
 	"common"
 	"services"
+	"log"
 )
 
 
@@ -32,24 +33,58 @@ func (this ServerService) FindById(id int64) ServerDTO{
 
 
 func (this ServerService) Create(request ServerDTO) {
-	var users []models.ServerUser
-	var disks []models.ServerDisk
 	server := &models.Server{}
 	common.Convert(request, server)
 	server.ServerId = common.GenUUID()
-	this.serverDao.Insert(server)
+	id := this.serverDao.Insert(server)
 
-	for _, u := range request.Users {
-		serverUser := models.ServerUser{ServerId:server.Id, UserName:u.UserName, Password:u.Password}
-		users = append(users, serverUser)
-	}
+	users, disks := this.getUserAndDiskByServerDTO(request, id)
 	this.serverUserDao.InsertAll(users)
-	for _, d := range request.Disks {
-		serverDisk := models.ServerDisk{ServerId:server.Id, RootPath:d.RootPath, Size: d.Size}
-		disks = append(disks, serverDisk)
-	}
 	this.serverDiskDao.InsertAll(disks)
 
+}
+
+func (this ServerService) Update(request ServerDTO) {
+	// 判断是否有数据
+	s := &models.Server{}
+	this.serverDao.FindOne(request.Id, s)
+	// 更新
+	server := &models.Server{}
+	common.Convert(request, server)
+	server.ServerId = s.ServerId
+	this.serverDao.Update(server)
+
+	// 重建对应的user disk
+	users, disks := this.getUserAndDiskByServerDTO(request)
+	// 删除原来的
+	this.serverDiskDao.DeleteByServerId(request.Id)
+	this.serverUserDao.DeleteByServerId(request.Id)
+	// 根据请求创建所有的
+	this.serverDiskDao.InsertAll(disks)
+	this.serverUserDao.InsertAll(users)
+}
+
+
+func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId ...int64) ([]models.ServerUser, []models.ServerDisk) {
+	var users []models.ServerUser
+	var disks []models.ServerDisk
+	id := request.Id
+	if id == 0 {
+		if len(serverId) == 0 {
+			log.Println("转换缺少serverId")
+			panic(common.NewServiceError(20003))
+		}
+		id = serverId[0]
+	}
+	for _, u := range request.Users {
+		serverUser := models.ServerUser{ServerId:id, UserName:u.UserName, Password:u.Password}
+		users = append(users, serverUser)
+	}
+	for _, d := range request.Disks {
+		serverDisk := models.ServerDisk{ServerId:id, RootPath:d.RootPath, Size: d.Size}
+		disks = append(disks, serverDisk)
+	}
+	return users, disks
 }
 
 func (this ServerService) FindList(request ListRequest) services.ResultPageVO {

@@ -61,7 +61,6 @@ func (b *BaseFunc) Insert(m interface{}) int64{
 		log.Panicln(err)
 	}
 	return id
-
 }
 
 func (b *BaseFunc) InsertAll(m interface{}){
@@ -71,6 +70,14 @@ func (b *BaseFunc) InsertAll(m interface{}){
 	}
 }
 
+
+func (b *BaseFunc) Update(m interface{}) {
+	_, err := ormer.Update(m)
+	if err != nil {
+		log.Println(err)
+		panic(err)
+	}
+}
 
 func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
 	qs := ormer.QueryTable(m).Filter("Id", id)
