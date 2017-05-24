@@ -19,6 +19,14 @@ func (this ServerService) FindById(id int64) ServerDTO{
 	this.serverDao.FindOne(id, server)
 	serverDTO := &ServerDTO{}
 	common.Convert(*server, serverDTO)
+	users := this.serverUserDao.FindByServerIds([]int64{id})
+	disks := this.serverDiskDao.FindByServerIds([]int64{id})
+	for _, u := range users {
+		serverDTO.Users = append(serverDTO.Users, UserDTO{Id:u.Id, UserName:u.UserName, Password:u.Password, ServerId:u.ServerId})
+	}
+	for _, d := range disks {
+		serverDTO.Disks = append(serverDTO.Disks, DiskDTO{Id:d.Id, RootPath:d.RootPath, Size:d.Size, ServerId:d.ServerId})
+	}
 	return *serverDTO
 }
 
@@ -54,6 +62,7 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 	}
 	users := this.serverUserDao.FindByServerIds(serverIds)
 	disks := this.serverDiskDao.FindByServerIds(serverIds)
+	//fmt.Println(common.Converts(UserDTO{}, users...))
 
 	var dtos []ServerDTO
 

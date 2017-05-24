@@ -40,7 +40,7 @@ func main() {
 				return
 			} else {
 				ctx.Output.SetStatus(500)
-				ctx.Output.Body(common.NewServiceError(10001).Json())
+				ctx.Output.Body(common.NewServiceError(10000).Json())
 
 				var stack string
 				logs.Critical("the request url is ", ctx.Input.URL())

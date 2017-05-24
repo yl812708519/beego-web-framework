@@ -51,7 +51,7 @@ type ServerDao struct {
 
 func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
 	server := Server{}
-	qs := ormer.QueryTable(&server)
+	qs := ormer.QueryTable(&server).Filter(isDeleteField, false)
 	if len(application) > 0 {
 		qs = qs.Filter("Application", application)
 	}

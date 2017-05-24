@@ -3,7 +3,6 @@ package common
 import (
 	"encoding/json"
      _ "github.com/astaxie/beego/config/yaml"
-
 	"github.com/astaxie/beego/config"
 	"fmt"
 	"os"
@@ -64,6 +63,12 @@ func (e ServiceError) Json() []byte {
 	}
 	return content
 }
+
+func (e ServiceError) Error() string{
+	content, _ := json.Marshal(e)
+	return string(content)
+}
+
 
 
 

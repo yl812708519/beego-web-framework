@@ -7,7 +7,7 @@ package services
 // 是否使用 之后待定
 
 type ResultVO struct {
-	result interface{}
+	Result interface{}   `json:"result"`
 }
 
 type ResultPageVO struct{

@@ -32,7 +32,7 @@ type ServerUserDao struct {
 
 func (this ServerUserDao) FindByServerIds(ids []int64) []ServerUser {
 	qs := ormer.QueryTable("server_users")
-	qs.Filter("ServerId__in", ids)
+	qs = qs.Filter("ServerId__in", ids)
 	var users []ServerUser
 	qs.All(&users)
 	return users

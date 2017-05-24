@@ -31,7 +31,7 @@ type ServerDiskDao struct {
 
 func (this ServerDiskDao) FindByServerIds(ids []int64) []ServerDisk {
 	qs := this.initQuerySetter("server_disks")
-	qs.Filter("ServerId__in", ids)
+	qs = qs.Filter("ServerId__in", ids)
 	var disks []ServerDisk
 	qs.All(&disks)
 	return disks

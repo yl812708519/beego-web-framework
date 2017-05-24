@@ -73,6 +73,10 @@ func (b *BaseFunc) InsertAll(m interface{}){
 
 func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
 	qs := ormer.QueryTable(m).Filter("Id", id)
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.Elem().FieldByName(isDeleteField); ok{
+		qs = qs.Filter(isDeleteField, false)
+	}
 	err := qs.One(m)
 	if err == orm.ErrNoRows {
 		// 没有找到记录

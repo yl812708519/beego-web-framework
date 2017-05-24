@@ -5,6 +5,8 @@ import (
 	"common"
 	"encoding/json"
 	"github.com/astaxie/beego"
+	"services"
+	"fmt"
 )
 
 type ServerController struct {
@@ -12,6 +14,25 @@ type ServerController struct {
 	serverService server.ServerService
 }
 
+
+//静态数据接口
+
+// @Title get applications
+// @Description   获取应用列表
+// @Success 200 like this:  { result: ["aa", "bb", "cc"] }
+// @Failure 400 service exception
+// @router /constant/:key [get]
+func (this *ServerController) GetApplications() {
+	key := this.GetString(":key")
+
+	v := services.ConstantMap[key]
+	fmt.Println(v)
+	if v == nil {
+		panic(common.NewServiceException(20001))
+	}
+	r := services.ResultVO{Result:v}
+	this.renderJSON(r)
+}
 
 
 // @Title create server
@@ -71,7 +92,7 @@ func (this *ServerController) FindById() {
 // @Param    engineRoom     query    string  false        "机房"
 // @Param    env            query    int     false        "环境"
 // @Param    ip             query    string  false        "ip"
-// @Success 200 {object} services.ResultPageVO
+// @Success 200 resultsVO:  { "count": 0, "results": [ serverDTO ] }
 // @Failure 400 service exception
 // @router /servers [get]
 func (this *ServerController) FindList() {
@@ -79,7 +100,7 @@ func (this *ServerController) FindList() {
 
 	d, err := beego.AppConfig.Int("defaultPageSize")
 	if err!=nil {
-		panic(common.NewServiceError(10001))
+		panic(common.NewServiceError(10000))
 	}
 	var e error
 	r.Page, e = this.GetInt("page", 1)
