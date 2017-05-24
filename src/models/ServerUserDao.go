@@ -43,3 +43,8 @@ func (this ServerUserDao) DeleteByServerId(id int64) {
 	qs.Update(orm.Params{"IsDeleted": true})
 }
 
+func (this ServerUserDao) DeleteByServerIds(ids []int64) {
+	qs := this.initQuerySetter("server_users").Filter("ServerId__in", ids)
+	qs.Update(orm.Params{"IsDeleted": true})
+}
+

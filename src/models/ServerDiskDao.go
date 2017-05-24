@@ -42,3 +42,8 @@ func (this ServerDiskDao) DeleteByServerId(id int64) {
 	qs := this.initQuerySetter("server_disks").Filter("ServerId", id)
 	qs.Update(orm.Params{"IsDeleted": true})
 }
+
+func (this ServerDiskDao) DeleteByServerIds(ids []int64) {
+	qs := this.initQuerySetter("server_disks").Filter("ServerId__in", ids)
+	qs.Update(orm.Params{"IsDeleted": true})
+}

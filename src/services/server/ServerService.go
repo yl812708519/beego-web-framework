@@ -95,4 +95,8 @@ func (this ServerService) Remove(id int64){
 
 }
 
-
+func (this ServerService) RemoveByIds(ids []int64){
+	this.serverDao.RemoveByIds(ids)
+	this.serverDiskDao.DeleteByServerIds(ids)
+	this.serverUserDao.DeleteByServerIds(ids)
+}

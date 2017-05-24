@@ -4,6 +4,8 @@ import (
 	"github.com/astaxie/beego"
 	"common"
 	"conf"
+	"encoding/json"
+	"fmt"
 )
 
 
@@ -34,6 +36,10 @@ func (b BaseController) getCookie(key string) string {
 		panic(common.NewServiceError(10002))
 	}
 	return v
+}
+
+func (b BaseController) parseJsonRequest(v interface{}) {
+	json.Unmarshal(b.Ctx.Input.RequestBody, v)
 }
 
 
