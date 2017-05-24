@@ -8,6 +8,7 @@ import (
 	"log"
 	"reflect"
 	"common"
+	"conf"
 )
 
 var (
@@ -23,10 +24,10 @@ const (
 
 func init() {
 	// 读取配置
-	mysqlUser := beego.AppConfig.String("mysqlUser")
-	mysqlPass := beego.AppConfig.String("mysqlPass")
-	mysqlUrl:= beego.AppConfig.String("mysqlUrl")
-	mysqlDb := beego.AppConfig.String("mysqlDb")
+	mysqlUser := beego.AppConfig.String(conf.DATABASE_MYSQL_USER_NAME)
+	mysqlPass := beego.AppConfig.String(conf.DATABASE_MYSQL_PASSWORD)
+	mysqlUrl:= beego.AppConfig.String(conf.DATABASE_MYSQL_URL)
+	mysqlDb := beego.AppConfig.String(conf.DATABASE_MYSQL_DB)
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4", mysqlUser, mysqlPass, mysqlUrl, mysqlDb)
 	log.Println("data source url: " + dataSource)
 	//注册mysql

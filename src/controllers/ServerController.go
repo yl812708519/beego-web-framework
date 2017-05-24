@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego"
 	"services"
 	"fmt"
+	"conf"
 )
 
 type ServerController struct {
@@ -98,7 +99,7 @@ func (this *ServerController) FindById() {
 func (this *ServerController) FindList() {
 	r := server.ListRequest{}
 
-	d, err := beego.AppConfig.Int("defaultPageSize")
+	d, err := beego.AppConfig.Int(conf.DEFAULT_GET_LIST_PAGE_SIZE)
 	if err!=nil {
 		panic(common.NewServiceError(10000))
 	}
