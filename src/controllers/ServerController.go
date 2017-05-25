@@ -18,7 +18,7 @@ type ServerController struct {
 //静态数据接口
 
 // @Title get applications
-// @Description   获取应用列表
+// @Description   获取静态数据列表 key : applications/envs/engineRom
 // @Success 200 like this:  { result: ["aa", "bb", "cc"] }
 // @Failure 400 service exception
 // @router /constant/:key [get]
@@ -53,6 +53,7 @@ func (this *ServerController) GetApplications() {
 func (this *ServerController) Create() {
 	serverRequest := &server.ServerDTO{}
 	this.parseJsonRequest(serverRequest)
+	this.valid(*serverRequest)
 	this.serverService.Create(*serverRequest)
 
 	this.renderSuccess()
@@ -60,7 +61,6 @@ func (this *ServerController) Create() {
 
 // @Title create server
 // @Description
-// @Param    id             formData    int64           true        "update"
 // @Param    tag            formData    string          true        "名称标签"
 // @Param    env            formData    string          false        "环境"
 // @Param    engineRoom     formData    string          true        "机房"

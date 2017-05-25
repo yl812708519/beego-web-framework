@@ -5,15 +5,15 @@ package server
 type ServerDTO struct {
 	Id int64                `form:"_"`
 	ServerId string         `form:"_"`
-	Tag string              `form:"tag"`
+	Tag string              `valid:"Required;MaxSize(50)" form:"tag"`
 	Application string      `form:"_"`
 	Env string              `form:"env"`
-	EngineRoom string       `form:"engineRoom"`
-	Core int                `form:"core"`
-	Memory int              `form:"memory"`
-	IntranetIp string       `form:"intranetIp"`
-	ExtranetIp string       `form:"extranetIp"`
-	Remark string           `form:"remark"`
+	EngineRoom string       `form:"engineRoom" valid:"Required"`
+	Core int                `form:"core" valid:"Required"`
+	Memory int              `form:"memory" valid:"Required"`
+	IntranetIp string       `form:"intranetIp" valid:"IP"`
+	ExtranetIp string       `form:"extranetIp" valid:"IP"`
+	Remark string           `form:"remark" valid:"MaxSize(200)"`
 
 	Users []UserDTO            `form:"users"`
 	Disks []DiskDTO            `form:"disks"`
@@ -27,16 +27,16 @@ type ServerDTO struct {
 type DiskDTO struct {
 	Id int64                `form:"_"`
 	ServerId int64          `form:"_"`
-	RootPath string         `form:"rootPath"`
-	Size int                `form:"size"`
+	RootPath string         `form:"rootPath" valid:"Required"`
+	Size int                `form:"size" valid:"Required"`
 }
 
 
 type UserDTO struct {
 	Id int64                `form:"_"`
 	ServerId int64          `form:"_"`
-	UserName string         `form:"userName"`
-	Password string         `form:"password"`
+	UserName string         `form:"userName" valid:"Required"`
+	Password string         `form:"password" valid:"Required"`
 }
 
 

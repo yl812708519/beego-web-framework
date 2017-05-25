@@ -5,6 +5,8 @@ import (
 	"common"
 	"conf"
 	"encoding/json"
+	"github.com/astaxie/beego/validation"
+	"log"
 )
 
 
@@ -42,3 +44,15 @@ func (b BaseController) parseJsonRequest(v interface{}) {
 }
 
 
+func (b BaseController) valid(o interface{}) {
+	valid := validation.Validation{}
+	res, err := valid.Valid(o)
+	if err != nil {
+		log.Println(err)
+		panic(common.NewServiceError(10000))
+	}
+	if !res {
+		err := valid.Errors[0]
+		panic(common.NewServiceException(common.ValidExceptionCode, err.Field + err.Message))
+	}
+}

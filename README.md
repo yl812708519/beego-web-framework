@@ -5,6 +5,7 @@
 * controller :  做请求数据的拼装过滤等工作， 尽量不涉及业务逻辑
 * service： 服务层， 处理业务逻辑， 返回DTO对象给controller层
 * dao: 数据层， 项目中使用models文件夹，（跟随beego创建规则）， 负责操作数据， 目前这层返回的直接是model实体， 并未包装
+* 2017.05.25之后， 项目中自定义方法遵循规则： 若方法修改了参数， 则参数传递指针， 否则传递值
 
 
 ##baseController
@@ -12,9 +13,9 @@
 
 ## 参数处理
 框架提供的传入参数处理机制貌似不完善， 无法parse 嵌套对象(无法测试尚不明了)
-使用解析json的形式可以达到要求，性能应该不是最优解
-form-data、x-www-form-urlencode 可以使用this.Ctx.Input() 接收
-application/json 只能使用 this.Ctx.Input.RequestBody()获取并解析
+使用解析json的形式可以达到要求，性能应该不是最优解  
+form-data、x-www-form-urlencode 可以使用this.Ctx.Input() 接收    
+application/json 只能使用 this.Ctx.Input.RequestBody()获取并解析  
 
 
 ## 错误封装
