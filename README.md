@@ -6,6 +6,7 @@
 * service： 服务层， 处理业务逻辑， 返回DTO对象给controller层
 * dao: 数据层， 项目中使用models文件夹，（跟随beego创建规则）， 负责操作数据， 目前这层返回的直接是model实体， 并未包装
 * 2017.05.25之后， 项目中自定义方法遵循规则： 若方法修改了参数， 则参数传递指针， 否则传递值
+* xsrf token 使用header：X-Xsrftoken 传递， 否则json 和delete方法无法解析
 
 
 ##baseController

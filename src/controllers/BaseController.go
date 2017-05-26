@@ -56,3 +56,18 @@ func (b BaseController) valid(o interface{}) {
 		panic(common.NewServiceException(common.ValidExceptionCode, err.Field + err.Message))
 	}
 }
+
+//
+//func (b BaseController) CheckXSRFCookie() bool {
+//	if !b.EnableXSRF {
+//		return true
+//	}
+//	b.Ctx.CheckXSRFCookie()
+//	defer func() {
+//		if err := recover();err != nil {
+//			log.Println(err)
+//			panic(common.NewServiceException(20003))
+//		}
+//	}()
+//	return true
+//}

@@ -15,7 +15,9 @@ type ResultPageVO struct{
 	Count   int64           `json:"count"`
 }
 
-
+func NewResultVO(r interface{}) ResultVO {
+	return ResultVO{r}
+}
 
 func SetResult(r *ResultPageVO, values ...interface{}) {
 	r.Results = values

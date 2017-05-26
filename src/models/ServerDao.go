@@ -47,19 +47,25 @@ func (this ServerDao) RemoveByIds(ids []int64) {
 
 func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
 	server := Server{}
-	qs := ormer.QueryTable(&server).Filter(isDeleteField, false)
+
+	cond := orm.NewCondition()
+
 	if len(application) > 0 {
-		qs = qs.Filter("Application", application)
+		cond.And("Application", application)
 	}
 	if len(engineRoom) > 0 {
-		qs = qs.Filter("EngineRoom", engineRoom)
+		cond.And("EngineRoom", engineRoom)
 	}
 	if len(env) > 0 {
-		qs = qs.Filter("Env", env)
+		cond.And("Env", env)
 	}
 	if len(ip) > 0 {
-		qs = qs.Filter("Ip", ip)
+		ipCond := orm.NewCondition()
+		ipCond.And("IntranetIp", ip)
+		ipCond.Or("ExtranetIp", ip)
+		cond.AndCond(ipCond)
 	}
+	qs := ormer.QueryTable(&server).SetCond(cond).Filter(isDeleteField, false)
 	count, err := qs.Count()
 	if err != nil {
 		log.Println(err)

@@ -61,3 +61,18 @@ CREATE TABLE `service` (
   `updated_at` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+-- Create syntax for TABLE 'service'
+CREATE TABLE `server_servings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `serving_id` bigint(20) unsigned NOT NULL COMMENT '服务id',
+  `server_id` bigint(20) unsigned DEFAULT NULL COMMENT '服务器id',
+  `creator_id` bigint(20) unsigned DEFAULT NULL COMMENT '创建人',
+  `updater_id` bigint(20) unsigned DEFAULT NULL COMMENT '最后操作人',
+  `is_deleted` tinyint(1) unsigned NOT NULL,
+  `created_at` bigint(20) unsigned NOT NULL,
+  `updated_at` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

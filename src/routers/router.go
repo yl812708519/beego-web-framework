@@ -34,6 +34,7 @@ func init() {
 	ns := beego.NewNamespace("/api",
 		beego.NSNamespace("/devops",
 			beego.NSInclude(&controllers.ServerController{}),
+			beego.NSInclude(&controllers.ServingController{}),
 		),
 
 	)

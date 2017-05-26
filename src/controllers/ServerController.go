@@ -5,7 +5,6 @@ import (
 	"common"
 	"github.com/astaxie/beego"
 	"services"
-	"fmt"
 	"conf"
 )
 
@@ -26,7 +25,6 @@ func (this *ServerController) GetApplications() {
 	key := this.GetString(":key")
 
 	v := services.ConstantMap[key]
-	fmt.Println(v)
 	if v == nil {
 		panic(common.NewServiceException(20001))
 	}
@@ -51,11 +49,12 @@ func (this *ServerController) GetApplications() {
 // @Failure 400 service exception
 // @router /servers [post]
 func (this *ServerController) Create() {
-	serverRequest := &server.ServerDTO{}
-	this.parseJsonRequest(serverRequest)
-	this.valid(*serverRequest)
-	this.serverService.Create(*serverRequest)
+	sr := &server.ServerDTO{}
+	this.parseJsonRequest(sr)
 
+	this.valid(*sr)
+
+	this.serverService.Create(*sr)
 	this.renderSuccess()
 }
 

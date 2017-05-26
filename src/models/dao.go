@@ -56,6 +56,13 @@ func (b *BaseFunc) calculateOffset(page, pageSize int) int {
 }
 
 func (b *BaseFunc) Insert(m interface{}) int64{
+	mType := reflect.TypeOf(m)
+	if _, ok := mType.Elem().FieldByName(createdAtField); ok {
+		setCreatedAt(m)
+	}
+	if _, ok := mType.Elem().FieldByName(createdAtField); ok {
+		setUpdatedAt(m)
+	}
 	id , err := ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
@@ -64,6 +71,29 @@ func (b *BaseFunc) Insert(m interface{}) int64{
 }
 
 func (b *BaseFunc) InsertAll(m interface{}){
+	mv := reflect.ValueOf(m)
+	if reflect.ValueOf(m).Kind() != reflect.Slice {
+		panic(common.NewServiceException(20002))
+	}
+	if mv.Len() <= 0 {
+		panic(common.NewServiceException(20005))
+	}
+
+	m0 := mv.Index(0)
+	mType := m0.Type()
+	fmt.Println(mType)
+	_, iscf := mType.FieldByName(createdAtField)
+	_, isuf := mType.FieldByName(updatedAtField)
+
+	for i:=0; i<mv.Len(); i++ {
+		v := mv.Index(i)
+		if iscf {
+			v.FieldByName(createdAtField).SetInt(common.GetTimeStamp())
+		}
+		if isuf {
+			v.FieldByName(updatedAtField).SetInt(common.GetTimeStamp())
+		}
+	}
 	_ , err := ormer.InsertMulti(5, m)
 	if err != nil {
 		log.Panicln(err)
@@ -72,6 +102,11 @@ func (b *BaseFunc) InsertAll(m interface{}){
 
 
 func (b *BaseFunc) Update(m interface{}) {
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.Elem().FieldByName(updatedAtField); ok {
+		mValue := reflect.ValueOf(m).Elem().FieldByName(updatedAtField)
+		mValue.SetInt(common.GetTimeStamp())
+	}
 	_, err := ormer.Update(m)
 	if err != nil {
 		log.Println(err)
@@ -107,4 +142,25 @@ func (b *BaseFunc) Remove(id int64, m interface{}){
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+func setUpdatedAt(m interface{}) {
+	mValue := reflect.ValueOf(m).Elem().FieldByName(updatedAtField)
+	mValue.SetInt(common.GetTimeStamp())
+}
+
+func setCreatedAt(m interface{}) {
+	mValue := reflect.ValueOf(m).Elem().FieldByName(createdAtField)
+	mValue.SetInt(common.GetTimeStamp())
+}
 
