@@ -161,6 +161,9 @@ func (this *ServerController) Remove() {
 func (this *ServerController) RemoveByIds() {
 	m := map[string][]int64{}
 	this.parseJsonRequest(&m)
+	if len(m["ids"]) <=0 {
+		this.renderSuccess()
+	}
 	this.serverService.RemoveByIds(m["ids"])
 	this.renderSuccess()
 }

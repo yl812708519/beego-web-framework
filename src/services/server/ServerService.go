@@ -28,6 +28,7 @@ func (this ServerService) FindById(id int64) ServerDTO{
 	for _, d := range disks {
 		serverDTO.Disks = append(serverDTO.Disks, DiskDTO{Id:d.Id, RootPath:d.RootPath, Size:d.Size, ServerId:d.ServerId})
 	}
+
 	return *serverDTO
 }
 
@@ -54,14 +55,12 @@ func (this ServerService) Update(request ServerDTO) {
 	server.ServerId = s.ServerId
 	this.serverDao.Update(server)
 
-	// 重建对应的user disk
-	users, disks := this.getUserAndDiskByServerDTO(request)
 	// 删除原来的
 	this.serverDiskDao.DeleteByServerId(request.Id)
 	this.serverUserDao.DeleteByServerId(request.Id)
 	// 根据请求创建所有的
-	this.serverDiskDao.InsertAll(disks)
-	this.serverUserDao.InsertAll(users)
+	this.serverDiskDao.InsertAll(common.ToSlice(common.Converts(request.Disks, models.ServerDisk{})))
+	this.serverUserDao.InsertAll(common.ToSlice(common.Converts(request.Users, models.ServerUser{})))
 }
 
 

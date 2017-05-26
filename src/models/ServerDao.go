@@ -39,6 +39,9 @@ type ServerDao struct {
 }
 
 func (this ServerDao) RemoveByIds(ids []int64) {
+	if len(ids) <= 0 {
+		return
+	}
 	qs := ormer.QueryTable(&Server{}).Filter("Id__in", ids)
 	qs.Update(orm.Params{
 		isDeleteField : true,
