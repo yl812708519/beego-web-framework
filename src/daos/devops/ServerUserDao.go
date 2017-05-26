@@ -1,6 +1,9 @@
-package models
+package devops
 
-import "github.com/astaxie/beego/orm"
+import (
+	"github.com/astaxie/beego/orm"
+	"daos"
+)
 
 func init() {
 	orm.RegisterModel(new(ServerUser))
@@ -22,7 +25,7 @@ func (u ServerUser) TableName() string {
 
 
 type ServerUserDao struct {
-	BaseFunc
+	daos.BaseFunc
 }
 //
 //func (this ServerUserDao) InsertAll(users []ServerUser) {
@@ -31,19 +34,19 @@ type ServerUserDao struct {
 
 
 func (this ServerUserDao) FindByServerIds(ids []int64) []ServerUser {
-	qs := this.initQuerySetter("server_users").Filter("ServerId__in", ids)
+	qs := this.InitQuerySetter("server_users").Filter("ServerId__in", ids)
 	var users []ServerUser
 	qs.All(&users)
 	return users
 }
 
 func (this ServerUserDao) DeleteByServerId(id int64) {
-	qs := this.initQuerySetter("server_users").Filter("ServerId", id)
+	qs := this.InitQuerySetter("server_users").Filter("ServerId", id)
 	qs.Update(orm.Params{"IsDeleted": true})
 }
 
 func (this ServerUserDao) DeleteByServerIds(ids []int64) {
-	qs := this.initQuerySetter("server_users").Filter("ServerId__in", ids)
+	qs := this.InitQuerySetter("server_users").Filter("ServerId__in", ids)
 	qs.Update(orm.Params{"IsDeleted": true})
 }
 

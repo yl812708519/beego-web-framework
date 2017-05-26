@@ -1,22 +1,22 @@
 package devops
 
 import (
-	"models"
 	"common"
 	"services"
 	"log"
+	"daos/devops"
 )
 
 
 type ServerService struct {
-	serverDao models.ServerDao
-	serverUserDao models.ServerUserDao
-	serverDiskDao models.ServerDiskDao
+	serverDao     devops.ServerDao
+	serverUserDao devops.ServerUserDao
+	serverDiskDao devops.ServerDiskDao
 }
 
 
 func (this ServerService) FindById(id int64) ServerDTO{
-	server := &models.Server{}
+	server := &devops.Server{}
 	this.serverDao.FindOne(id, server)
 	serverDTO := &ServerDTO{}
 	common.Convert(*server, serverDTO)
@@ -34,7 +34,7 @@ func (this ServerService) FindById(id int64) ServerDTO{
 
 
 func (this ServerService) Create(request ServerDTO) {
-	server := &models.Server{}
+	server := &devops.Server{}
 	common.Convert(request, server)
 	server.ServerId = common.GenUUID()
 	id := this.serverDao.Insert(server)
@@ -47,10 +47,10 @@ func (this ServerService) Create(request ServerDTO) {
 
 func (this ServerService) Update(request ServerDTO) {
 	// 判断是否有数据
-	s := &models.Server{}
+	s := &devops.Server{}
 	this.serverDao.FindOne(request.Id, s)
 	// 更新
-	server := &models.Server{}
+	server := &devops.Server{}
 	common.Convert(request, server)
 	server.ServerId = s.ServerId
 	this.serverDao.Update(server)
@@ -59,14 +59,14 @@ func (this ServerService) Update(request ServerDTO) {
 	this.serverDiskDao.DeleteByServerId(request.Id)
 	this.serverUserDao.DeleteByServerId(request.Id)
 	// 根据请求创建所有的
-	this.serverDiskDao.InsertAll(common.ToSlice(common.Converts(request.Disks, models.ServerDisk{})))
-	this.serverUserDao.InsertAll(common.ToSlice(common.Converts(request.Users, models.ServerUser{})))
+	this.serverDiskDao.InsertAll(common.ToSlice(common.Converts(request.Disks, devops.ServerDisk{})))
+	this.serverUserDao.InsertAll(common.ToSlice(common.Converts(request.Users, devops.ServerUser{})))
 }
 
 
-func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId ...int64) ([]models.ServerUser, []models.ServerDisk) {
-	var users []models.ServerUser
-	var disks []models.ServerDisk
+func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId ...int64) ([]devops.ServerUser, []devops.ServerDisk) {
+	var users []devops.ServerUser
+	var disks []devops.ServerDisk
 	id := request.Id
 	if id == 0 {
 		if len(serverId) == 0 {
@@ -76,11 +76,11 @@ func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId 
 		id = serverId[0]
 	}
 	for _, u := range request.Users {
-		serverUser := models.ServerUser{ServerId:id, UserName:u.UserName, Password:u.Password}
+		serverUser := devops.ServerUser{ServerId: id, UserName: u.UserName, Password: u.Password}
 		users = append(users, serverUser)
 	}
 	for _, d := range request.Disks {
-		serverDisk := models.ServerDisk{ServerId:id, RootPath:d.RootPath, Size: d.Size}
+		serverDisk := devops.ServerDisk{ServerId: id, RootPath: d.RootPath, Size: d.Size}
 		disks = append(disks, serverDisk)
 	}
 	return users, disks
@@ -123,7 +123,7 @@ func (this ServerService) FindList(request ServerListRequest) services.ResultPag
 
 
 func (this ServerService) Remove(id int64){
-	this.serverDao.Remove(id, &models.Server{})
+	this.serverDao.Remove(id, &devops.Server{})
 	this.serverDiskDao.DeleteByServerId(id)
 	this.serverUserDao.DeleteByServerId(id)
 

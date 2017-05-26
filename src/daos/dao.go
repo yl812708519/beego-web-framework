@@ -1,4 +1,4 @@
-package models
+package daos
 
 import (
 	"github.com/astaxie/beego/orm"
@@ -12,14 +12,14 @@ import (
 )
 
 var (
-	ormer orm.Ormer
+	Ormer orm.Ormer
 	regModels map[string] reflect.Type
 )
 
 const (
-	isDeleteField = "IsDeleted"
-	createdAtField = "CreatedAt"
-	updatedAtField = "CreatedAt"
+	IsDeleteField = "IsDeleted"
+	CreatedAtField = "CreatedAt"
+	UpdatedAtField = "CreatedAt"
 )
 
 func init() {
@@ -37,7 +37,7 @@ func init() {
 }
 
 func OrmInitHockFunc() error{
-	ormer = orm.NewOrm()
+	Ormer = orm.NewOrm()
 	return nil
 }
 
@@ -47,23 +47,24 @@ type BaseFunc struct {
 
 }
 
-func (this BaseFunc) initQuerySetter(tableName string) orm.QuerySeter {
-	return ormer.QueryTable(tableName)
+func (this BaseFunc) InitQuerySetter(tableName string) orm.QuerySeter {
+	return Ormer.QueryTable(tableName)
 }
 
-func (b *BaseFunc) calculateOffset(page, pageSize int) int {
+func (b *BaseFunc) CalculateOffset(page, pageSize int) int {
 	return (page - 1) * pageSize
 }
 
+// 接收指针
 func (b *BaseFunc) Insert(m interface{}) int64{
 	mType := reflect.TypeOf(m)
-	if _, ok := mType.Elem().FieldByName(createdAtField); ok {
+	if _, ok := mType.Elem().FieldByName(CreatedAtField); ok {
 		setCreatedAt(m)
 	}
-	if _, ok := mType.Elem().FieldByName(createdAtField); ok {
+	if _, ok := mType.Elem().FieldByName(CreatedAtField); ok {
 		setUpdatedAt(m)
 	}
-	id , err := ormer.Insert(m)
+	id , err := Ormer.Insert(m)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -82,19 +83,19 @@ func (b *BaseFunc) InsertAll(m interface{}){
 	m0 := mv.Index(0)
 	mType := m0.Type()
 	fmt.Println(mType)
-	_, iscf := mType.FieldByName(createdAtField)
-	_, isuf := mType.FieldByName(updatedAtField)
+	_, iscf := mType.FieldByName(CreatedAtField)
+	_, isuf := mType.FieldByName(UpdatedAtField)
 
 	for i:=0; i<mv.Len(); i++ {
 		v := mv.Index(i)
 		if iscf {
-			v.FieldByName(createdAtField).SetInt(common.GetTimeStamp())
+			v.FieldByName(CreatedAtField).SetInt(common.GetTimeStamp())
 		}
 		if isuf {
-			v.FieldByName(updatedAtField).SetInt(common.GetTimeStamp())
+			v.FieldByName(UpdatedAtField).SetInt(common.GetTimeStamp())
 		}
 	}
-	_ , err := ormer.InsertMulti(5, m)
+	_ , err := Ormer.InsertMulti(5, m)
 	if err != nil {
 		log.Panicln(err)
 	}
@@ -103,11 +104,11 @@ func (b *BaseFunc) InsertAll(m interface{}){
 
 func (b *BaseFunc) Update(m interface{}) {
 	mType := reflect.TypeOf(m)
-	if _, ok:=mType.Elem().FieldByName(updatedAtField); ok {
-		mValue := reflect.ValueOf(m).Elem().FieldByName(updatedAtField)
+	if _, ok:=mType.Elem().FieldByName(UpdatedAtField); ok {
+		mValue := reflect.ValueOf(m).Elem().FieldByName(UpdatedAtField)
 		mValue.SetInt(common.GetTimeStamp())
 	}
-	_, err := ormer.Update(m)
+	_, err := Ormer.Update(m)
 	if err != nil {
 		log.Println(err)
 		panic(err)
@@ -115,10 +116,10 @@ func (b *BaseFunc) Update(m interface{}) {
 }
 
 func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
-	qs := ormer.QueryTable(m).Filter("Id", id)
+	qs := Ormer.QueryTable(m).Filter("Id", id)
 	mType := reflect.TypeOf(m)
-	if _, ok:=mType.Elem().FieldByName(isDeleteField); ok{
-		qs = qs.Filter(isDeleteField, false)
+	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
+		qs = qs.Filter(IsDeleteField, false)
 	}
 	err := qs.One(m)
 	if err == orm.ErrNoRows {
@@ -130,14 +131,14 @@ func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
 
 func (b *BaseFunc) Remove(id int64, m interface{}){
 	mType := reflect.TypeOf(m)
-	if _, ok:=mType.Elem().FieldByName(isDeleteField); ok{
+	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
 		// 有is_deleted字段
 		b.FindOne(id, m)
-		mValue := reflect.ValueOf(m).Elem().FieldByName(isDeleteField)
+		mValue := reflect.ValueOf(m).Elem().FieldByName(IsDeleteField)
 		mValue.SetBool(true)
-		ormer.Update(m, isDeleteField)
+		Ormer.Update(m, IsDeleteField)
 	} else {
-		ormer.QueryTable(m).Filter("Id", id).Delete()
+		Ormer.QueryTable(m).Filter("Id", id).Delete()
 	}
 
 }
@@ -155,12 +156,12 @@ func (b *BaseFunc) Remove(id int64, m interface{}){
 
 
 func setUpdatedAt(m interface{}) {
-	mValue := reflect.ValueOf(m).Elem().FieldByName(updatedAtField)
+	mValue := reflect.ValueOf(m).Elem().FieldByName(UpdatedAtField)
 	mValue.SetInt(common.GetTimeStamp())
 }
 
 func setCreatedAt(m interface{}) {
-	mValue := reflect.ValueOf(m).Elem().FieldByName(createdAtField)
+	mValue := reflect.ValueOf(m).Elem().FieldByName(CreatedAtField)
 	mValue.SetInt(common.GetTimeStamp())
 }
 

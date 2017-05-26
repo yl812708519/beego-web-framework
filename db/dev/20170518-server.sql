@@ -49,7 +49,6 @@ CREATE TABLE `service` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(100) NOT NULL DEFAULT '' COMMENT '名称/标签',
   `application` varchar(100) NOT NULL DEFAULT '' COMMENT '应用',
-  `server_id` bigint(20) unsigned DEFAULT NULL COMMENT '服务器id',
   `url` varchar(200) DEFAULT '' COMMENT 'url',
   `version` varchar(50) NOT NULL DEFAULT '' COMMENT 'version',
   `dependency` varchar(200) DEFAULT '' COMMENT '依赖',

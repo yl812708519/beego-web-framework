@@ -1,8 +1,9 @@
-package models
+package devops
 
 import (
 	"github.com/astaxie/beego/orm"
 	"log"
+	"daos"
 )
 
 func init() {
@@ -35,16 +36,16 @@ func (u Server) TableName() string {
 
 
 type ServerDao struct {
-	BaseFunc
+	daos.BaseFunc
 }
 
 func (this ServerDao) RemoveByIds(ids []int64) {
 	if len(ids) <= 0 {
 		return
 	}
-	qs := ormer.QueryTable(&Server{}).Filter("Id__in", ids)
+	qs := daos.Ormer.QueryTable(&Server{}).Filter("Id__in", ids)
 	qs.Update(orm.Params{
-		isDeleteField : true,
+		daos.IsDeleteField : true,
 	})
 }
 
@@ -68,13 +69,13 @@ func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pa
 		ipCond.Or("ExtranetIp", ip)
 		cond.AndCond(ipCond)
 	}
-	qs := ormer.QueryTable(&server).SetCond(cond).Filter(isDeleteField, false)
+	qs := daos.Ormer.QueryTable(&server).SetCond(cond).Filter(daos.IsDeleteField, false)
 	count, err := qs.Count()
 	if err != nil {
 		log.Println(err)
 	}
 
-	qs = qs.Limit(pageSize).Offset(this.calculateOffset(page, pageSize))
+	qs = qs.Limit(pageSize).Offset(this.CalculateOffset(page, pageSize))
 	var servers []Server
 	qs.All(&servers)
 	return servers, count

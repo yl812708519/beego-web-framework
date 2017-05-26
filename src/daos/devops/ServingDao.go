@@ -1,5 +1,13 @@
-package models
+package devops
 
+import (
+	"github.com/astaxie/beego/orm"
+	"daos"
+)
+
+func init() {
+	orm.RegisterModel(new(Serving))
+}
 
 
 type Serving struct {
@@ -18,9 +26,11 @@ type Serving struct {
 	UpdatedAt   int64       `orm:"column(update_at)"`
 }
 
-
+func (u Serving) TableName() string {
+	return "services"
+}
 type ServingDao struct {
-	BaseFunc
+	daos.BaseFunc
 }
 
 
