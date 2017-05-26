@@ -1,10 +1,12 @@
 package controllers
 
-import "services/serving"
+import (
+	"services/devops"
+)
 
 type ServingController struct {
 	BaseController
-	service serving.ServingService
+	service devops.ServingService
 
 }
 
@@ -24,7 +26,7 @@ type ServingController struct {
 // @Failure 400 service exception
 // @router /servings [post]
 func (this *ServingController) Create() {
-	s := serving.ServingCreateDTO{}
+	s := devops.ServingCreateDTO{}
 	this.parseJsonRequest(&s)
 	this.valid(s)
 	this.service.Create(s)

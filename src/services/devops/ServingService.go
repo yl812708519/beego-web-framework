@@ -1,15 +1,14 @@
-package serving
+package devops
 
 import (
 	"models"
 	"common"
-	"services/server"
 	"services"
 )
 
 type ServingService struct {
 	dao models.ServerDao
-	serverService server.ServerService
+	serverService ServerService
 }
 
 

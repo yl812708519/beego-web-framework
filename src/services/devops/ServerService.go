@@ -1,4 +1,4 @@
-package server
+package devops
 
 import (
 	"models"
@@ -86,7 +86,7 @@ func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId 
 	return users, disks
 }
 
-func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
+func (this ServerService) FindList(request ServerListRequest) services.ResultPageVO {
 
 	servers, count := this.serverDao.FindList(request.Application, request.EngineRoom,
 		request.Env, request.Ip, request.Page, request.PageSize)
@@ -106,7 +106,7 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 		for _, u := range users {
 			if u.ServerId == s.Id {
 				sd.Users = append(sd.Users, UserDTO{Id:u.Id, UserName:u.UserName, Password:u.Password, ServerId:u.ServerId})
-			}
+		}
 		}
 		for _, d := range disks {
 			if d.ServerId == s.Id {

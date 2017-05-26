@@ -1,4 +1,4 @@
-package server
+package devops
 
 
 
@@ -6,7 +6,7 @@ package server
 
 
 // 列表查询请求结构
-type ListRequest struct {
+type ServerListRequest struct {
 	Page int
 	PageSize int
 	Application string

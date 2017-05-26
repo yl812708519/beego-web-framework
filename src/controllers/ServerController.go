@@ -1,16 +1,16 @@
 package controllers
 
 import (
-	"services/server"
 	"common"
 	"github.com/astaxie/beego"
 	"services"
 	"conf"
+	"services/devops"
 )
 
 type ServerController struct {
 	BaseController
-	serverService server.ServerService
+	serverService devops.ServerService
 }
 
 
@@ -49,7 +49,7 @@ func (this *ServerController) GetApplications() {
 // @Failure 400 service exception
 // @router /servers [post]
 func (this *ServerController) Create() {
-	sr := &server.ServerDTO{}
+	sr := &devops.ServerDTO{}
 	this.parseJsonRequest(sr)
 
 	this.valid(*sr)
@@ -74,7 +74,7 @@ func (this *ServerController) Create() {
 // @Failure 400 service exception
 // @router /servers/:id [put]
 func (this *ServerController) Update() {
-	serverRequest := &server.ServerDTO{}
+	serverRequest := &devops.ServerDTO{}
 	this.parseJsonRequest(serverRequest)
 	serverRequest.Id, _ = this.GetInt64(":id")
 	this.serverService.Update(*serverRequest)
@@ -113,7 +113,7 @@ func (this *ServerController) FindById() {
 // @Failure 400 service exception
 // @router /servers [get]
 func (this *ServerController) FindList() {
-	r := server.ListRequest{}
+	r := devops.ServerListRequest{}
 
 	d, err := beego.AppConfig.Int(conf.DEFAULT_GET_LIST_PAGE_SIZE)
 	if err!=nil {

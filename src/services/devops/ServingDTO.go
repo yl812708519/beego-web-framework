@@ -1,6 +1,5 @@
-package serving
+package devops
 
-import "services/server"
 
 type ServingCreateDTO struct {
 
@@ -28,7 +27,7 @@ type ServingDTO struct {
 	IsDeleted   bool                `json:"isDeleted"`
 	CreatedDate   string            `json:"createdDate"`
 	UpdatedDate   string            `json:"updatedDate"`
-	Servers     []server.ServerDTO  `json:"servers"`
+	Servers     []ServerDTO  `json:"servers"`
 }
 
 

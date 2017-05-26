@@ -3,7 +3,7 @@
 
 ## 项目分为三层，view 托管于框架不在此中
 * controller :  做请求数据的拼装过滤等工作， 尽量不涉及业务逻辑
-* service： 服务层， 处理业务逻辑， 返回DTO对象给controller层
+* service： 服务层， 处理业务逻辑， 返回DTO对象给controller层, 结构， services/模块  ， 模块下是一个service对应一个dto文件， 写在一起应该可以
 * dao: 数据层， 项目中使用models文件夹，（跟随beego创建规则）， 负责操作数据， 目前这层返回的直接是model实体， 并未包装
 * 2017.05.25之后， 项目中自定义方法遵循规则： 若方法修改了参数， 则参数传递指针， 否则传递值
 * xsrf token 使用header：X-Xsrftoken 传递， 否则json 和delete方法无法解析
