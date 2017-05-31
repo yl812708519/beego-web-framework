@@ -123,3 +123,9 @@ func (this ServingService) Update(dto ServingCreateDTO) {
 }
 
 
+func (this ServingService) Remove(ids []int64) {
+	m := devops.Serving{}
+	this.servingDao.RemoveByIds(ids, &m)
+	this.serverServingDao.DeleteByServingIds(ids)
+}
+

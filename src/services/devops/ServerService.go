@@ -12,6 +12,7 @@ type ServerService struct {
 	serverDao     devops.ServerDao
 	serverUserDao devops.ServerUserDao
 	serverDiskDao devops.ServerDiskDao
+	serverServingDao devops.ServerServingDao
 }
 
 
@@ -143,6 +144,7 @@ func (this ServerService) Remove(id int64){
 	this.serverDao.Remove(id, &devops.Server{})
 	this.serverDiskDao.DeleteByServerId(id)
 	this.serverUserDao.DeleteByServerId(id)
+	this.serverServingDao.DeleteByServerIds([]int64{id})
 
 }
 
@@ -150,4 +152,5 @@ func (this ServerService) RemoveByIds(ids []int64){
 	this.serverDao.RemoveByIds(ids)
 	this.serverDiskDao.DeleteByServerIds(ids)
 	this.serverUserDao.DeleteByServerIds(ids)
+	this.serverServingDao.DeleteByServerIds(ids)
 }

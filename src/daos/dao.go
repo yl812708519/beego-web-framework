@@ -162,10 +162,18 @@ func (b *BaseFunc) Remove(id int64, m interface{}){
 	} else {
 		Ormer.QueryTable(m).Filter("Id", id).Delete()
 	}
-
 }
 
-
+func (b *BaseFunc) RemoveByIds(ids []int64, m interface{}){
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
+		// 有is_deleted字段
+		qs := b.InitQuerySetter(m)
+		qs.Filter("Id__in", ids).Update(orm.Params{IsDeleteField: true})
+	} else {
+		Ormer.QueryTable(m).Filter("Id_in", ids).Delete()
+	}
+}
 
 
 

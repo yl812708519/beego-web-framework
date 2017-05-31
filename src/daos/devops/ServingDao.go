@@ -59,8 +59,6 @@ func (this ServingDao) FindServingList(application string, page, pageSize int) (
 	c := []Serving{}
 	qs.All(&c)
 	return c, count
-
-
 }
 
 

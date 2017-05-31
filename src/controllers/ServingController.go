@@ -111,3 +111,35 @@ func (this *ServingController) Update() {
 	this.renderSuccess()
 
 }
+
+// @Title delete serving
+// @Description 删除server信息
+// @Param   id     path    int64  true        "server id"
+// @Success 200 {status: "success"}
+// @Failure 400 400 service exception
+// @router /servings/:id [delete]
+func (this *ServingController) Remove() {
+	id, err := this.GetInt64(":id")
+	if err != nil{
+		panic(common.NewServiceException(20003))
+	}
+	this.servingService.Remove([]int64{id})
+	this.renderSuccess()
+}
+
+
+// @Title delete serving
+// @Description 删除server信息
+// @Param   ids    formData    []int64    true        "json like this: {"ids": [2,3,4,5,6]}"
+// @Success 200 {status: "success"}
+// @Failure 400 400 service exception
+// @router /servings [delete]
+func (this *ServingController) RemoveByIds() {
+	m := map[string][]int64{}
+	this.parseJsonRequest(&m)
+	if len(m["ids"]) <=0 {
+		this.renderSuccess()
+	}
+	this.servingService.Remove(m["ids"])
+	this.renderSuccess()
+}

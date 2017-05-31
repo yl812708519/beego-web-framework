@@ -4,7 +4,6 @@ import (
 	"daos"
 	"log"
 	"github.com/astaxie/beego/orm"
-	"fmt"
 )
 
 func init() {
@@ -77,11 +76,16 @@ func (this ServerServingDao) FindServingIdList(application, engineRoom, env, ip 
 
 
 func (this ServerServingDao) DeleteByServingIds(ids []int64) {
-	fmt.Println(ids)
 	m := &ServerServing{}
 	qs := this.InitQuerySetter(m)
 	qs.Filter("ServingId__in", ids).Update(orm.Params{daos.IsDeleteField: true})
 }
 
+
+func (this ServerServingDao) DeleteByServerIds(ids []int64) {
+	m := &ServerServing{}
+	qs := this.InitQuerySetter(m)
+	qs.Filter("ServerId__in", ids).Update(orm.Params{daos.IsDeleteField: true})
+}
 
 
