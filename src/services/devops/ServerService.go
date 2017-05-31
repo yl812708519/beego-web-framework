@@ -58,9 +58,11 @@ func (this ServerService) Update(request ServerDTO) {
 	// 删除原来的
 	this.serverDiskDao.DeleteByServerId(request.Id)
 	this.serverUserDao.DeleteByServerId(request.Id)
+
+	users, disks := this.getUserAndDiskByServerDTO(request, request.Id)
 	// 根据请求创建所有的
-	this.serverDiskDao.InsertAll(common.ToSlice(common.Converts(request.Disks, devops.ServerDisk{})))
-	this.serverUserDao.InsertAll(common.ToSlice(common.Converts(request.Users, devops.ServerUser{})))
+	this.serverDiskDao.InsertAll(disks)
+	this.serverUserDao.InsertAll(users)
 }
 
 
@@ -86,10 +88,13 @@ func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId 
 	return users, disks
 }
 
-func (this ServerService) FindList(request ServerListRequest) services.ResultPageVO {
+func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 
 	servers, count := this.serverDao.FindList(request.Application, request.EngineRoom,
 		request.Env, request.Ip, request.Page, request.PageSize)
+	if len(servers) <= 0 {
+		return services.ResultPageVO{Results:[]ServerDTO{}, Count:count}
+	}
 	var serverIds []int64
 	for _, s := range servers {
 		serverIds = append(serverIds, s.Id)
@@ -97,7 +102,12 @@ func (this ServerService) FindList(request ServerListRequest) services.ResultPag
 	users := this.serverUserDao.FindByServerIds(serverIds)
 	disks := this.serverDiskDao.FindByServerIds(serverIds)
 	//fmt.Println(common.Converts(UserDTO{}, users...))
+	dtos := this.convertServer(servers, users, disks)
 
+	return services.ResultPageVO{dtos, count}
+}
+func (this ServerService) convertServer(servers []devops.Server, users []devops.ServerUser,
+		disks []devops.ServerDisk) []ServerDTO {
 	var dtos []ServerDTO
 
 	for _, s := range servers {
@@ -106,7 +116,7 @@ func (this ServerService) FindList(request ServerListRequest) services.ResultPag
 		for _, u := range users {
 			if u.ServerId == s.Id {
 				sd.Users = append(sd.Users, UserDTO{Id:u.Id, UserName:u.UserName, Password:u.Password, ServerId:u.ServerId})
-		}
+			}
 		}
 		for _, d := range disks {
 			if d.ServerId == s.Id {
@@ -115,12 +125,19 @@ func (this ServerService) FindList(request ServerListRequest) services.ResultPag
 		}
 		dtos = append(dtos, sd)
 	}
-	var result services.ResultPageVO
-	services.SetResult(&result, dtos)
-	result.Count = count
-	return result
+	return dtos
 }
 
+func (this ServerService) FindByIds(ids []int64) []ServerDTO {
+	if len(ids) <= 0 {
+		panic(common.NewServiceException(20005))
+	}
+	servers := this.serverDao.FindByIds(ids)
+	users := this.serverUserDao.FindByServerIds(ids)
+	disks := this.serverDiskDao.FindByServerIds(ids)
+	return this.convertServer(servers, users, disks)
+
+}
 
 func (this ServerService) Remove(id int64){
 	this.serverDao.Remove(id, &devops.Server{})

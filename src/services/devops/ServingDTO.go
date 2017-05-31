@@ -24,11 +24,22 @@ type ServingDTO struct {
 	Version     string              `json:"version"`
 	Dependency  string              `json:"dependency"`
 	Remark      string              `json:"remark"`
-	IsDeleted   bool                `json:"isDeleted"`
 	CreatedDate   string            `json:"createdDate"`
 	UpdatedDate   string            `json:"updatedDate"`
-	Servers     []ServerDTO  `json:"servers"`
 }
 
+type ServingDetailDTO struct {
+	Id          int64               `json:"id"`
+	Tag         string              `json:"tag"`
+	Application string              `json:"application"`
+	Url         string              `json:"url"`
+	Version     string              `json:"version"`
+	Dependency  string              `json:"dependency"`
+	Remark      string              `json:"remark"`
+	CreatedDate   string            `json:"createdDate"`
+	UpdatedDate   string            `json:"updatedDate"`
+
+	Servers     []SimpleServerDTO   `json:"servers"`
+}
 
 

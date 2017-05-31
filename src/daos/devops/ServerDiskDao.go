@@ -33,7 +33,7 @@ type ServerDiskDao struct {
 //}
 
 func (this ServerDiskDao) FindByServerIds(ids []int64) []ServerDisk {
-	qs := this.InitQuerySetter("server_disks")
+	qs := this.InitQuerySetter(&ServerDisk{}).Filter(daos.IsDeleteField, false)
 	qs = qs.Filter("ServerId__in", ids)
 	var disks []ServerDisk
 	qs.All(&disks)
@@ -42,11 +42,11 @@ func (this ServerDiskDao) FindByServerIds(ids []int64) []ServerDisk {
 
 
 func (this ServerDiskDao) DeleteByServerId(id int64) {
-	qs := this.InitQuerySetter("server_disks").Filter("ServerId", id)
+	qs := this.InitQuerySetter(&ServerDisk{}).Filter(daos.IsDeleteField, false).Filter("ServerId", id)
 	qs.Update(orm.Params{"IsDeleted": true})
 }
 
 func (this ServerDiskDao) DeleteByServerIds(ids []int64) {
-	qs := this.InitQuerySetter("server_disks").Filter("ServerId__in", ids)
+	qs := this.InitQuerySetter(&ServerDisk{}).Filter("ServerId__in", ids)
 	qs.Update(orm.Params{"IsDeleted": true})
 }

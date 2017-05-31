@@ -6,6 +6,7 @@ import (
 	"services"
 	"conf"
 	"services/devops"
+	"fmt"
 )
 
 type ServerController struct {
@@ -76,6 +77,8 @@ func (this *ServerController) Create() {
 func (this *ServerController) Update() {
 	serverRequest := &devops.ServerDTO{}
 	this.parseJsonRequest(serverRequest)
+
+	this.valid(serverRequest)
 	serverRequest.Id, _ = this.GetInt64(":id")
 	this.serverService.Update(*serverRequest)
 
@@ -113,7 +116,7 @@ func (this *ServerController) FindById() {
 // @Failure 400 service exception
 // @router /servers [get]
 func (this *ServerController) FindList() {
-	r := devops.ServerListRequest{}
+	r := devops.ListRequest{}
 
 	d, err := beego.AppConfig.Int(conf.DEFAULT_GET_LIST_PAGE_SIZE)
 	if err!=nil {
@@ -130,7 +133,7 @@ func (this *ServerController) FindList() {
 	r.Env= this.GetString("env")
 	r.Ip= this.GetString("ip")
 
-
+	fmt.Println(r)
 	resultVO := this.serverService.FindList(r)
 	this.renderJSON(resultVO)
 }

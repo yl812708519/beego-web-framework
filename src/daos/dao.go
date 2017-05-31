@@ -17,9 +17,10 @@ var (
 )
 
 const (
+	Id = "id"
 	IsDeleteField = "IsDeleted"
 	CreatedAtField = "CreatedAt"
-	UpdatedAtField = "CreatedAt"
+	UpdatedAtField = "UpdatedAt"
 )
 
 func init() {
@@ -41,14 +42,34 @@ func OrmInitHockFunc() error{
 	return nil
 }
 
-
 // 基础方法类， 减少一些代码量
 type BaseFunc struct {
 
 }
 
-func (this BaseFunc) InitQuerySetter(tableName string) orm.QuerySeter {
-	return Ormer.QueryTable(tableName)
+// param: ptr value
+// 如果要查被删掉的， 请自己初始化query setter
+func (this BaseFunc) InitQuerySetter(m interface{}) orm.QuerySeter {
+	// 默认按照创建时间倒叙排列
+	qs := Ormer.QueryTable(m).OrderBy("-"+CreatedAtField)
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
+		qs = qs.Filter(IsDeleteField, false)
+	}
+	return qs
+}
+
+// 虽然是公共的和调用方不在一个包里。 原则上只有dao层使用
+func (this BaseFunc) InitFindByIdsQs(m interface{}, ids []int64) orm.QuerySeter {
+	if len(ids) <= 0 {
+		panic(common.NewServiceException(20005))
+	}
+	qs := Ormer.QueryTable(m).Filter(Id+"__in", ids)
+	mType := reflect.TypeOf(m)
+	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
+		qs = qs.Filter(IsDeleteField, false)
+	}
+	return qs
 }
 
 func (b *BaseFunc) CalculateOffset(page, pageSize int) int {
@@ -128,6 +149,7 @@ func (b *BaseFunc) FindOne(id int64, m interface{}) interface{} {
 	}
 	return m
 }
+
 
 func (b *BaseFunc) Remove(id int64, m interface{}){
 	mType := reflect.TypeOf(m)

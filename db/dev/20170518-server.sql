@@ -45,7 +45,7 @@ CREATE TABLE `servers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Create syntax for TABLE 'service'
-CREATE TABLE `service` (
+CREATE TABLE `services` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(100) NOT NULL DEFAULT '' COMMENT '名称/标签',
   `application` varchar(100) NOT NULL DEFAULT '' COMMENT '应用',
@@ -63,11 +63,16 @@ CREATE TABLE `service` (
 
 
 
--- Create syntax for TABLE 'service'
+-- Create syntax for TABLE 'server_servings'
 CREATE TABLE `server_servings` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `serving_id` bigint(20) unsigned NOT NULL COMMENT '服务id',
   `server_id` bigint(20) unsigned DEFAULT NULL COMMENT '服务器id',
+  `env` varchar(30) NOT NULL DEFAULT '' COMMENT '环境-服务器',
+  `application` varchar(100) NOT NULL DEFAULT '' COMMENT '应用',
+  `engine_room` varchar(30) NOT NULL DEFAULT '' COMMENT '机房',
+  `intranet_ip` varchar(30) DEFAULT '' COMMENT '内网ip',
+  `extranet_ip` varchar(30) DEFAULT '' COMMENT '外网ip',
   `creator_id` bigint(20) unsigned DEFAULT NULL COMMENT '创建人',
   `updater_id` bigint(20) unsigned DEFAULT NULL COMMENT '最后操作人',
   `is_deleted` tinyint(1) unsigned NOT NULL,
@@ -75,3 +80,6 @@ CREATE TABLE `server_servings` (
   `updated_at` bigint(20) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+

@@ -6,6 +6,19 @@ import (
 	"fmt"
 )
 
+//todo 转换ids
+func ConvertIds(){
+
+}
+
+//todo 转换id 为key 的map
+func ConvertMapByIds(){
+
+}
+
+
+
+
 func Convert(o interface{}, target interface{}) interface{} {
 
 	// 获取 字段数
@@ -50,7 +63,7 @@ func Convert(o interface{}, target interface{}) interface{} {
 	return target
 }
 
-
+//todo targets传入一个数组， 通过指针数组传回值
 // 可以实现转换， 但是数组无法通配, 使用范围很局限
 // 配合ToSlice  可以转换为[]interface{}  本质上只有interface{}可以接收，例如dao.insertAll
 // 调用方接收后需要手动转换为slice

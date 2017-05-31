@@ -3,40 +3,54 @@ package devops
 
 
 type ServerDTO struct {
-	Id int64                `form:"_"`
-	ServerId string         `form:"_"`
-	Tag string              `valid:"Required;MaxSize(50)" form:"tag"`
-	Application string      `form:"_"`
-	Env string              `form:"env"`
-	EngineRoom string       `form:"engineRoom" valid:"Required"`
-	Core int                `form:"core" valid:"Required"`
-	Memory int              `form:"memory" valid:"Required"`
-	IntranetIp string       `form:"intranetIp" valid:"IP"`
-	ExtranetIp string       `form:"extranetIp" valid:"IP"`
-	Remark string           `form:"remark" valid:"MaxSize(200)"`
+	Id int64                `json:"id"`
+	ServerId string         `json:"serverId"`
+	Tag string              `valid:"Required;MaxSize(50)" json:"tag"`
+	Application string      `json:"application"`
+	Env string              `json:"env"`
+	EngineRoom string       `json:"engineRoom" valid:"Required"`
+	Core int                `json:"core" valid:"Required"`
+	Memory int              `json:"memory" valid:"Required"`
+	IntranetIp string       `json:"intranetIp" valid:"IP"`
+	ExtranetIp string       `json:"extranetIp" valid:"IP"`
+	Remark string           `json:"remark" valid:"MaxSize(200)"`
 
-	Users []UserDTO            `form:"users"`
-	Disks []DiskDTO            `form:"disks"`
+	Users []UserDTO            `json:"users"`
+	Disks []DiskDTO            `json:"disks"`
 
-	IsDeleted bool          `form:"_"`
-	CreatedDate string      `form:"_"`
-	UpdatedDate string      `form:"_"`
+	IsDeleted bool          `json:"-"`
+	CreatedDate string      `json:"createdDate"`
+	UpdatedDate string      `json:"updatedDate"`
 
 }
 
 type DiskDTO struct {
-	Id int64                `form:"_"`
-	ServerId int64          `form:"_"`
-	RootPath string         `form:"rootPath" valid:"Required"`
-	Size int                `form:"size" valid:"Required"`
+	Id int64                `json:"id"`
+	ServerId int64          `json:"serverId"`
+	RootPath string         `json:"rootPath" valid:"Required"`
+	Size int                `json:"size" valid:"Required"`
 }
 
 
 type UserDTO struct {
-	Id int64                `form:"_"`
-	ServerId int64          `form:"_"`
-	UserName string         `form:"userName" valid:"Required"`
-	Password string         `form:"password" valid:"Required"`
+	Id int64                `json:"id"`
+	ServerId int64          `json:"serverId"`
+	UserName string         `json:"userName" valid:"Required"`
+	Password string         `json:"password" valid:"Required"`
+}
+
+
+
+
+type SimpleServerDTO struct {
+	Id int64                `json:"id"`
+	ServerId string         `json:"serverId"`
+	Tag string              `valid:"Required;MaxSize(50)"`
+	Env string              `json:"env"`
+	EngineRoom string       `json:"engineRoom"`
+	Core int                `json:"core"`
+	Memory int              `json:"memory"`
+	ExtranetIp string       `json:"extranetIp"`
 }
 
 

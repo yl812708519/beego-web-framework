@@ -32,29 +32,29 @@ func main() {
 				panic(err)
 			}
 
+			var stack string
+			logs.Critical("the request url is ", ctx.Input.URL())
+			logs.Critical("Handler crashed with error", err)
+			for i := 1; ; i++ {
+				_, file, line, ok := runtime.Caller(i)
+				if !ok {
+					break
+				}
+				logs.Critical(fmt.Sprintf("%s:%d", file, line))
+				stack = stack + fmt.Sprintln(fmt.Sprintf("%s:%d", file, line))
+			}
+
+
 			// 新加逻辑， 如果可以转换为serviceException
 			se, cok := err.(common.ServiceException)
 			if cok {
 				ctx.Output.SetStatus(400)
-				ctx.Output.Body(se.Json())
-				return
+				ctx.Output.JSON(se, false, false)
 			} else {
 				ctx.Output.SetStatus(500)
-				ctx.Output.Body(common.NewServiceError(10000).Json())
-
-				var stack string
-				logs.Critical("the request url is ", ctx.Input.URL())
-				logs.Critical("Handler crashed with error", err)
-				for i := 1; ; i++ {
-					_, file, line, ok := runtime.Caller(i)
-					if !ok {
-						break
-					}
-					logs.Critical(fmt.Sprintf("%s:%d", file, line))
-					stack = stack + fmt.Sprintln(fmt.Sprintf("%s:%d", file, line))
-				}
-				return
+				ctx.Output.JSON(common.NewServiceError(10000), false,false)
 			}
+			return
 
 		}
 	}

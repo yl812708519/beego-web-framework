@@ -51,25 +51,20 @@ func (this ServerDao) RemoveByIds(ids []int64) {
 
 func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
 	server := Server{}
-
-	cond := orm.NewCondition()
+	qs := daos.Ormer.QueryTable(&server).Filter(daos.IsDeleteField, false)
 
 	if len(application) > 0 {
-		cond.And("Application", application)
+		qs = qs.Filter("Application", application)
 	}
 	if len(engineRoom) > 0 {
-		cond.And("EngineRoom", engineRoom)
+		qs = qs.Filter("EngineRoom", engineRoom)
 	}
 	if len(env) > 0 {
-		cond.And("Env", env)
+		qs = qs.Filter("Env", env)
 	}
 	if len(ip) > 0 {
-		ipCond := orm.NewCondition()
-		ipCond.And("IntranetIp", ip)
-		ipCond.Or("ExtranetIp", ip)
-		cond.AndCond(ipCond)
+		qs = qs.Filter("ExtranetIp", ip)
 	}
-	qs := daos.Ormer.QueryTable(&server).SetCond(cond).Filter(daos.IsDeleteField, false)
 	count, err := qs.Count()
 	if err != nil {
 		log.Println(err)
@@ -83,4 +78,19 @@ func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pa
 }
 
 
+func (this ServerDao) FindByIds(ids []int64) []Server {
+	qs := this.InitFindByIdsQs(&Server{}, ids)
+	res := []Server{}
+	qs.All(&res)
+	return res
+}
+
+func (this ServerDao) FindMapByIds(ids []int64) map[int64]Server {
+	servers := this.FindByIds(ids)
+	result := map[int64]Server{}
+	for _, x := range servers {
+		result[x.Id] = x
+	}
+	return result
+}
 

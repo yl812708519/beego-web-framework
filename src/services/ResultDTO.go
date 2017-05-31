@@ -11,7 +11,7 @@ type ResultVO struct {
 }
 
 type ResultPageVO struct{
-	Results []interface{}   `json:"results"`
+	Results interface{}     `json:"results"`
 	Count   int64           `json:"count"`
 }
 
@@ -19,9 +19,6 @@ func NewResultVO(r interface{}) ResultVO {
 	return ResultVO{r}
 }
 
-func SetResult(r *ResultPageVO, values ...interface{}) {
-	r.Results = values
-}
 
 
 
