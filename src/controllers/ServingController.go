@@ -7,6 +7,7 @@ import (
 	"conf"
 )
 
+// 服务相关接口
 type ServingController struct {
 	BaseController
 	servingService devops.ServingService
@@ -84,4 +85,29 @@ func (this *ServingController) FindList() {
 
 	resultVO := this.servingService.FindServings(r)
 	this.renderJSON(resultVO)
+}
+
+
+
+// @Title 查找一个服务
+// @Description
+// @Param    id             query       int64           true        "id"
+// @Param    tag            formData    string          true        "名称标签"
+// @Param    serverIds      formData    []int64         false       "服务器ids 数组"
+// @Param    application    formData    string          true        "应用"
+// @Param    url            formData    string          false       "URL"
+// @Param    version        formData    string          true        "版本"
+// @Param    dependency     formData    string          false       "依赖"
+// @Param    remark         formData    string          false       "备注"
+// @Success 200  {status: success}
+// @Failure 400 service exception
+// @router /servings/:id [put]
+func (this *ServingController) Update() {
+	id := this.getInt64(":id")
+	s := devops.ServingCreateDTO{}
+	this.parseJsonRequest(&s)
+	s.Id = id
+	this.servingService.Update(s)
+	this.renderSuccess()
+
 }

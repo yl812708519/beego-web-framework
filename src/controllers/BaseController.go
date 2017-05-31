@@ -15,6 +15,14 @@ type BaseController struct {
 	beego.Controller
 }
 
+func (b BaseController) getInt64(key string) int64 {
+	v, err := b.GetInt64(":id")
+	if err != nil{
+		panic(common.NewServiceException(20003))
+	}
+	return v
+}
+
 func (b BaseController) renderJSON(object interface{}){
 	b.Data["json"] = object
 	b.ServeJSON()

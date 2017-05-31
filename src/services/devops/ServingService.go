@@ -19,6 +19,10 @@ func (this ServingService) Create(dto ServingCreateDTO) {
 	common.Convert(dto, m)
 	this.servingDao.Insert(m)
 	// 创建关联关系
+	this.createServerServing(dto, m)
+}
+
+func (this ServingService) createServerServing(dto ServingCreateDTO, serving *devops.Serving) {
 	if len(dto.ServerIds) > 0 {
 		servers := this.serverDao.FindByIds(dto.ServerIds)
 		if len(servers) > 0 {
@@ -26,7 +30,7 @@ func (this ServingService) Create(dto ServingCreateDTO) {
 			for _, server := range servers {
 				models = append(models,
 					devops.ServerServing{ServerId:server.Id,
-						ServingId:m.Id, Application:m.Application,
+						ServingId:serving.Id, Application:serving.Application,
 						Env:server.Env, EngineRoom:server.EngineRoom,
 						IntranetIp:server.IntranetIp, ExtranetIp: server.ExtranetIp,
 					})
@@ -35,7 +39,6 @@ func (this ServingService) Create(dto ServingCreateDTO) {
 		}
 	}
 }
-
 
 func (this ServingService) FindById(id int64) services.ResultVO {
 	m := &devops.Serving{}
@@ -79,7 +82,7 @@ func (this ServingService) FindServings(request ListRequest) services.ResultPage
 	return services.ResultPageVO{Results:res, Count:count}
 }
 func (this ServingService) findServingList(request ListRequest) services.ResultPageVO{
-	models, count := this.serverServingDao.FindServingList(request.Application, request.EngineRoom, request.Env,
+	models, count := this.serverServingDao.FindServingIdList(request.Application, request.EngineRoom, request.Env,
 		request.Ip, request.Page, request.PageSize)
 	result := services.ResultPageVO{Count:count}
 	servingIds := []int64{}
@@ -106,5 +109,17 @@ func (this ServingService) FindByIds(ids []int64) []ServingDTO {
 
 }
 
+
+
+func (this ServingService) Update(dto ServingCreateDTO) {
+	serving := &devops.Serving{}
+	this.servingDao.FindOne(dto.Id, serving)
+	common.Convert(dto, serving)
+	this.servingDao.Update(serving)
+
+	this.serverServingDao.DeleteByServingIds([]int64{serving.Id})
+	this.createServerServing(dto, serving)
+
+}
 
 

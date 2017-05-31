@@ -11,9 +11,6 @@ type ServingCreateDTO struct {
 	Version     string      `json:"version"`
 	Dependency  string      `json:"dependency"`
 	Remark      string      `json:"remark"`
-	IsDeleted   bool        `json:"isDeleted"`
-	CreatedDate   string    `json:"createdDate"`
-	UpdatedDate   string    `json:"updatedDate"`
 }
 
 type ServingDTO struct {

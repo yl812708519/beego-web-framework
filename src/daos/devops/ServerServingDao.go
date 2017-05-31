@@ -4,6 +4,7 @@ import (
 	"daos"
 	"log"
 	"github.com/astaxie/beego/orm"
+	"fmt"
 )
 
 func init() {
@@ -46,7 +47,7 @@ func (this ServerServingDao) FindByServingId(id int64) []ServerServing {
 }
 
 // 根据条件查询serving 的列表, 多对多使用了分组
-func (this ServerServingDao) FindServingList(application, engineRoom, env, ip string, page, pageSize int) ([]ServerServing, int64) {
+func (this ServerServingDao) FindServingIdList(application, engineRoom, env, ip string, page, pageSize int) ([]ServerServing, int64) {
 	serverServing := ServerServing{}
 
 	// 分组查询有问题。 会死在mysql only_full_group_by 上，设置多个字段不好用。。。
@@ -74,6 +75,13 @@ func (this ServerServingDao) FindServingList(application, engineRoom, env, ip st
 }
 
 
+
+func (this ServerServingDao) DeleteByServingIds(ids []int64) {
+	fmt.Println(ids)
+	m := &ServerServing{}
+	qs := this.InitQuerySetter(m)
+	qs.Filter("ServingId__in", ids).Update(orm.Params{daos.IsDeleteField: true})
+}
 
 
 
