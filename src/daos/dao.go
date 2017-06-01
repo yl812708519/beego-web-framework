@@ -13,7 +13,6 @@ import (
 
 var (
 	Ormer orm.Ormer
-	regModels map[string] reflect.Type
 )
 
 const (
@@ -23,7 +22,7 @@ const (
 	UpdatedAtField = "UpdatedAt"
 )
 
-func init() {
+func OrmInitHockFunc() error{
 	// 读取配置
 	mysqlUser := beego.AppConfig.String(conf.DATABASE_MYSQL_USER_NAME)
 	mysqlPass := beego.AppConfig.String(conf.DATABASE_MYSQL_PASSWORD)
@@ -34,10 +33,6 @@ func init() {
 	//注册mysql
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", dataSource)
-
-}
-
-func OrmInitHockFunc() error{
 	Ormer = orm.NewOrm()
 	return nil
 }
@@ -51,7 +46,7 @@ type BaseFunc struct {
 // 如果要查被删掉的， 请自己初始化query setter
 func (this BaseFunc) InitQuerySetter(m interface{}) orm.QuerySeter {
 	// 默认按照创建时间倒叙排列
-	qs := Ormer.QueryTable(m).OrderBy("-"+CreatedAtField)
+	qs := Ormer.QueryTable(m).OrderBy("-"+Id)
 	mType := reflect.TypeOf(m)
 	if _, ok:=mType.Elem().FieldByName(IsDeleteField); ok{
 		qs = qs.Filter(IsDeleteField, false)

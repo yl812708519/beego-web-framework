@@ -6,7 +6,7 @@ import (
 	"services"
 	"conf"
 	"services/devops"
-	"fmt"
+
 )
 
 type ServerController struct {
@@ -133,7 +133,7 @@ func (this *ServerController) FindList() {
 	r.Env= this.GetString("env")
 	r.Ip= this.GetString("ip")
 
-	fmt.Println(r)
+
 	resultVO := this.serverService.FindList(r)
 	this.renderJSON(resultVO)
 }

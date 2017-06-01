@@ -1,6 +1,12 @@
 
 # 项目描述
 
+## 项目配置
+beego 虽然支持多个环境多分配置， 但是run-mode只能在编译前修改
+所以还是决定使用多个配置文件， 通过接收的run mode 参数加载不同的config
+
+
+
 ## 项目分为三层，view 托管于框架不在此中
 * controller :  做请求数据的拼装过滤等工作， 尽量不涉及业务逻辑
 * service： 服务层， 处理业务逻辑， 返回DTO对象给controller层, 结构， services/模块  ， 模块下是一个service对应一个dto文件， 写在一起应该可以

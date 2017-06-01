@@ -48,9 +48,9 @@ func (this ServerDao) RemoveByIds(ids []int64) {
 	})
 }
 
-func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
+func (this ServerDao) FindList(engineRoom, env, ip string, page, pageSize int) ([]Server, int64) {
 	server := Server{}
-	qs := daos.Ormer.QueryTable(&server).Filter(daos.IsDeleteField, false)
+	qs := this.InitQuerySetter(&server)
 
 	if len(engineRoom) > 0 {
 		qs = qs.Filter("EngineRoom", engineRoom)
