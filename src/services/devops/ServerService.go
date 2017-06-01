@@ -5,6 +5,7 @@ import (
 	"services"
 	"log"
 	"daos/devops"
+	"fmt"
 )
 
 
@@ -89,7 +90,25 @@ func (this ServerService) getUserAndDiskByServerDTO(request ServerDTO, serverId 
 	return users, disks
 }
 
+// 筛选条件有 application时通过关联表分组查询
+func (this ServerService) findListByApplication(request ListRequest) services.ResultPageVO{
+	serverServings, c := this.serverServingDao.FindServerIdList(request.Application, request.Page, request.PageSize)
+	if len(serverServings) <= 0 {
+		return services.ResultPageVO{Results:[]ServerDTO{}, Count:c}
+	}
+	fmt.Println(serverServings)
+	serverIds := []int64{}
+	for _, s := range serverServings{
+		serverIds = append(serverIds, s.ServerId)
+	}
+	return services.ResultPageVO{Results:this.FindByIds(serverIds), Count:c}
+}
+
 func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
+
+	if len(request.Application) >= 0 {
+		return this.findListByApplication(request)
+	}
 
 	servers, count := this.serverDao.FindList(request.Application, request.EngineRoom,
 		request.Env, request.Ip, request.Page, request.PageSize)

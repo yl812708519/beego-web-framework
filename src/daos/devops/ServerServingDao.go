@@ -50,8 +50,8 @@ func (this ServerServingDao) FindServingIdList(application, engineRoom, env, ip 
 	serverServing := ServerServing{}
 
 	// 分组查询有问题。 会死在mysql only_full_group_by 上，设置多个字段不好用。。。
-	qs := this.InitQuerySetter(&serverServing)
-
+	//qs := this.InitQuerySetter(&serverServing)
+	qs := daos.Ormer.QueryTable(&serverServing).Filter(daos.IsDeleteField, false)
 	if len(engineRoom) > 0 {
 		qs = qs.Filter("EngineRoom", engineRoom)
 	}
@@ -68,25 +68,27 @@ func (this ServerServingDao) FindServingIdList(application, engineRoom, env, ip 
 	}
 
 	var res []ServerServing
-	qs.All(&res, "serving_id")
+	qs = qs.Limit(pageSize).Offset(this.CalculateOffset(page, pageSize)).OrderBy("-serving_id")
+	qs.GroupBy( "serving_id").All(&res, "serving_id")
 	return res, count
-
 }
 
 func (this ServerServingDao) FindServerIdList(application string, page, pageSize int) ([]ServerServing, int64) {
 	serverServing := ServerServing{}
 
 	// 分组查询有问题。 会死在mysql only_full_group_by 上，设置多个字段不好用。。。
-	qs := this.InitQuerySetter(&serverServing)
+	qs := daos.Ormer.QueryTable(&serverServing).Filter(daos.IsDeleteField, false)
 	if len(application) >= 0 {
-		qs.Filter("Application", application)
+		qs = qs.Filter("Application", application)
 	}
-	count, err := qs.GroupBy("serving_id").Count()
+
+	count, err := qs.GroupBy("server_id").Count()
 	if err != nil {
 		log.Println(err)
 	}
 	var res []ServerServing
-	qs.All(&res, "server_id")
+	qs.GroupBy("server_id").OrderBy("-server_id").
+			Limit(pageSize).Offset(this.CalculateOffset(page, pageSize)).All(&res, "server_id")
 	return res, count
 
 }
