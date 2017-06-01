@@ -22,5 +22,5 @@ func Time2Date_yyyyMMDD(t int64) string {
 	t *= nanoMil
 	timer := time.Unix(0,t)
 
-	return timer.Format("2006-01-02 15:04:05")
+	return timer.Format("2006-01-02")
 }
