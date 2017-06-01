@@ -77,6 +77,8 @@ func (this ServingService) FindServings(request ListRequest) services.ResultPage
 	for _, s:= range servings {
 		d := ServingDTO{}
 		common.Convert(s, &d)
+		d.UpdatedDate = common.Time2Date_yyyyMMDDHHMMSS(s.UpdatedAt)
+		d.CreatedDate= common.Time2Date_yyyyMMDDHHMMSS(s.CreatedAt)
 		res = append(res, d)
 	}
 	return services.ResultPageVO{Results:res, Count:count}
@@ -107,6 +109,8 @@ func (this ServingService) FindByIds(ids []int64) []ServingDTO {
 	for _, s:= range servings {
 		d := ServingDTO{}
 		common.Convert(s, &d)
+		d.UpdatedDate = common.Time2Date_yyyyMMDDHHMMSS(s.UpdatedAt)
+		d.CreatedDate= common.Time2Date_yyyyMMDDHHMMSS(s.CreatedAt)
 		res = append(res, d)
 	}
 	return res

@@ -30,7 +30,8 @@ func (this ServerService) FindById(id int64) ServerDTO{
 	for _, d := range disks {
 		serverDTO.Disks = append(serverDTO.Disks, DiskDTO{Id:d.Id, RootPath:d.RootPath, Size:d.Size, ServerId:d.ServerId})
 	}
-
+	serverDTO.CreatedDate = common.Time2Date_yyyyMMDDHHMMSS(server.CreatedAt)
+	serverDTO.UpdatedDate = common.Time2Date_yyyyMMDDHHMMSS(server.UpdatedAt)
 	return *serverDTO
 }
 
@@ -157,6 +158,9 @@ func (this ServerService) convertServer(servers []devops.Server, users []devops.
 		}
 		apps := applicationMap[sd.Id]
 		sd.Applications = common.RmDuplicate(&apps)
+
+		sd.CreatedDate = common.Time2Date_yyyyMMDDHHMMSS(s.CreatedAt)
+		sd.UpdatedDate = common.Time2Date_yyyyMMDDHHMMSS(s.UpdatedAt)
 		dtos = append(dtos, sd)
 	}
 	return dtos

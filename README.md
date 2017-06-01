@@ -5,6 +5,9 @@
 beego 虽然支持多个环境多分配置， 但是run-mode只能在编译前修改
 所以还是决定使用多个配置文件， 通过接收的run mode 参数加载不同的config
 
+目前 使用第一个参数 -mode 指定运行模式(dev/test/prod)，缺省值为dev
+例如 ./app -mode=test
+具体逻辑在main.go
 
 
 ## 项目分为三层，view 托管于框架不在此中
