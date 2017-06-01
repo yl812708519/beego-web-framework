@@ -9,7 +9,6 @@ if [ ! -d "../deploy" ]; then
 fi
 
 mv main ../deploy/
-yes | cp -rf src/conf  ../deploy/conf
+yes | cp -rf src/conf  ../deploy/
 cd ../deploy
 ./main -mode=test
-
