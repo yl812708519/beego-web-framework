@@ -5,7 +5,6 @@ import (
 	"services"
 	"log"
 	"daos/devops"
-	"fmt"
 )
 
 
@@ -114,7 +113,6 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 func (this ServerService) convertApplication(servings []devops.ServerServing) map[int64] []string {
 	resMap := map[int64] []string{}
 	for _, ss := range servings {
-		fmt.Println(ss)
 		resMap[ss.ServerId] = append(resMap[ss.ServerId], ss.Application)
 	}
 	return resMap
