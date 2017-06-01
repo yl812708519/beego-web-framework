@@ -73,6 +73,33 @@ func (this ServerServingDao) FindServingIdList(application, engineRoom, env, ip 
 
 }
 
+func (this ServerServingDao) FindServerIdList(application string, page, pageSize int) ([]ServerServing, int64) {
+	serverServing := ServerServing{}
+
+	// 分组查询有问题。 会死在mysql only_full_group_by 上，设置多个字段不好用。。。
+	qs := this.InitQuerySetter(&serverServing)
+	if len(application) >= 0 {
+		qs.Filter("Application", application)
+	}
+	count, err := qs.GroupBy("serving_id").Count()
+	if err != nil {
+		log.Println(err)
+	}
+	var res []ServerServing
+	qs.All(&res, "server_id")
+	return res, count
+
+}
+func (this ServerServingDao) FindByServerIds(ids []int64) []ServerServing {
+	serverServing := ServerServing{}
+
+	qs := this.InitQuerySetter(&serverServing).Filter("ServerId__in", ids)
+	var res []ServerServing
+	qs.All(&res)
+	return res
+
+}
+
 
 
 func (this ServerServingDao) DeleteByServingIds(ids []int64) {

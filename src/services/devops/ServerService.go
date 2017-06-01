@@ -5,6 +5,7 @@ import (
 	"services"
 	"log"
 	"daos/devops"
+	"fmt"
 )
 
 
@@ -102,12 +103,25 @@ func (this ServerService) FindList(request ListRequest) services.ResultPageVO {
 	}
 	users := this.serverUserDao.FindByServerIds(serverIds)
 	disks := this.serverDiskDao.FindByServerIds(serverIds)
-	//fmt.Println(common.Converts(UserDTO{}, users...))
-	dtos := this.convertServer(servers, users, disks)
+
+	serverServings := this.serverServingDao.FindByServerIds(serverIds)
+	aMap := this.convertApplication(serverServings)
+	dtos := this.convertServer(servers, users, aMap, disks)
 
 	return services.ResultPageVO{dtos, count}
 }
+
+func (this ServerService) convertApplication(servings []devops.ServerServing) map[int64] []string {
+	resMap := map[int64] []string{}
+	for _, ss := range servings {
+		fmt.Println(ss)
+		resMap[ss.ServerId] = append(resMap[ss.ServerId], ss.Application)
+	}
+	return resMap
+}
+
 func (this ServerService) convertServer(servers []devops.Server, users []devops.ServerUser,
+		applicationMap map[int64] []string,
 		disks []devops.ServerDisk) []ServerDTO {
 	var dtos []ServerDTO
 
@@ -124,6 +138,8 @@ func (this ServerService) convertServer(servers []devops.Server, users []devops.
 				sd.Disks = append(sd.Disks, DiskDTO{Id:d.Id, RootPath:d.RootPath, Size:d.Size, ServerId:d.ServerId})
 			}
 		}
+		apps := applicationMap[sd.Id]
+		sd.Applications = common.RmDuplicate(&apps)
 		dtos = append(dtos, sd)
 	}
 	return dtos
@@ -136,7 +152,9 @@ func (this ServerService) FindByIds(ids []int64) []ServerDTO {
 	servers := this.serverDao.FindByIds(ids)
 	users := this.serverUserDao.FindByServerIds(ids)
 	disks := this.serverDiskDao.FindByServerIds(ids)
-	return this.convertServer(servers, users, disks)
+	serverServings := this.serverServingDao.FindByServerIds(ids)
+	aMap := this.convertApplication(serverServings)
+	return this.convertServer(servers, users, aMap, disks)
 
 }
 

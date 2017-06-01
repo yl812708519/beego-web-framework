@@ -14,7 +14,6 @@ type Server struct{
 	Id int64                `orm:"column(id)"`
 	ServerId string         `orm:"column(server_id)"`
 	Tag string              `orm:"column(tag)"`
-	Application string      `orm:"column(application)"`
 	Env string              `orm:"column(env)"`
 	EngineRoom string       `orm:"column(engine_room)"`
 	Core int                `orm:"column(core)"`
@@ -53,9 +52,6 @@ func (this ServerDao) FindList(application, engineRoom, env, ip string, page, pa
 	server := Server{}
 	qs := daos.Ormer.QueryTable(&server).Filter(daos.IsDeleteField, false)
 
-	if len(application) > 0 {
-		qs = qs.Filter("Application", application)
-	}
 	if len(engineRoom) > 0 {
 		qs = qs.Filter("EngineRoom", engineRoom)
 	}

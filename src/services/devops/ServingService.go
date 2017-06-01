@@ -4,7 +4,6 @@ import (
 	"common"
 	"services"
 	"daos/devops"
-	"fmt"
 )
 
 type ServingService struct {
@@ -89,7 +88,9 @@ func (this ServingService) findServingList(request ListRequest) services.ResultP
 	for _, model := range models {
 		servingIds = append(servingIds, model.ServingId)
 	}
-	fmt.Println(models)
+	if len(servingIds) <= 0 {
+		return services.ResultPageVO{Count:count, Results:[]devops.Serving{}}
+	}
 	servings := this.FindByIds(servingIds)
 
 	result.Results = servings

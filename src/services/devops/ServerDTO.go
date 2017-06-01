@@ -6,7 +6,7 @@ type ServerDTO struct {
 	Id int64                `json:"id"`
 	ServerId string         `json:"serverId"`
 	Tag string              `valid:"Required;MaxSize(50)" json:"tag"`
-	Application string      `json:"application"`
+	Applications []string   `json:"applications"`
 	Env string              `json:"env"`
 	EngineRoom string       `json:"engineRoom" valid:"Required"`
 	Core int                `json:"core" valid:"Required"`

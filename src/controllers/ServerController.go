@@ -18,7 +18,7 @@ type ServerController struct {
 //静态数据接口
 
 // @Title get applications
-// @Description   获取静态数据列表 key : applications/envs/engineRom
+// @Description   获取静态数据列表 key : applications/envs/engineRoom
 // @Success 200 like this:  { result: ["aa", "bb", "cc"] }
 // @Failure 400 service exception
 // @router /constant/:key [get]

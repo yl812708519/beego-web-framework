@@ -28,7 +28,6 @@ CREATE TABLE `servers` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `server_id` varchar(36) NOT NULL DEFAULT '' COMMENT '生成的唯一id字符串',
   `tag` varchar(100) NOT NULL DEFAULT '' COMMENT '名称/标签',
-  `application` varchar(100) DEFAULT '' COMMENT '应用',
   `env` varchar(30) DEFAULT '' COMMENT '环境',
   `engine_room` varchar(30) NOT NULL DEFAULT '' COMMENT '机房',
   `core` tinyint(4) unsigned NOT NULL COMMENT '核心数',
