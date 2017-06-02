@@ -6,7 +6,7 @@ pkg
 # 注释掉二进制文件
 src/src
 *.DS_Store
-/src/routers/*
-/src/swagger
+/src/devops/routers/*
+/src/devops/swagger
 # 屏蔽dev模式生成的注解路由
-!/src/routers/router.go
+!/src/devops/routers/router.go
