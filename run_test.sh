@@ -14,4 +14,4 @@ fi
 mv main ../deploy/devops
 yes | cp -rf src/devops/conf  ../deploy/
 cd ../deploy
-./main -mode=test
+./devops -mode=test
