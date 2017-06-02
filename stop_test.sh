@@ -1,3 +1,3 @@
 
 
-kill -9 8088
+ps -ef|grep ./main|grep -v grep|awk '{print $2}' |xargs kill -9
