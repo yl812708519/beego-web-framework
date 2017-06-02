@@ -4,7 +4,7 @@ pkg
 .idea
 *tmp
 # 注释掉二进制文件
-src/src
+src/devops/main
 *.DS_Store
 /src/devops/routers/*
 /src/devops/swagger
