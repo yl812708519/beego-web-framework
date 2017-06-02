@@ -14,4 +14,4 @@ fi
 mv main ../deploy/devops
 yes | cp -rf src/devops/conf  ../deploy/
 cd ../deploy
-./devops -mode=test
+nohup ./devops -mode=test > stdout.log 2>&1 &

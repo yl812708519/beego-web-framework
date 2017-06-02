@@ -29,7 +29,7 @@ func OrmInitHockFunc() error{
 	mysqlUrl:= beego.AppConfig.String(conf.DATABASE_MYSQL_URL)
 	mysqlDb := beego.AppConfig.String(conf.DATABASE_MYSQL_DB)
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4", mysqlUser, mysqlPass, mysqlUrl, mysqlDb)
-	log.Println("data source url: " + dataSource)
+	fmt.Println("data source url: " + dataSource)
 	//注册mysql
 	orm.RegisterDriver("mysql", orm.DRMySQL)
 	orm.RegisterDataBase("default", "mysql", dataSource)

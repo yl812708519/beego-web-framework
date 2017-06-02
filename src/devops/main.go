@@ -11,7 +11,6 @@ import (
 	"devops/common"
 	"devops/daos"
 	"os"
-	"log"
 )
 
 func main() {
@@ -22,7 +21,7 @@ func main() {
 			beego.LoadAppConfig("ini", "conf/"+modeStr[6:]+".app.conf")
 		}
 	}
-	log.Println("current run mode : "+ beego.BConfig.RunMode)
+	fmt.Println("current run mode : "+ beego.BConfig.RunMode)
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
