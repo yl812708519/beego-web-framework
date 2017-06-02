@@ -11,7 +11,7 @@ if [ ! -d "../deploy" ]; then
   mkdir ../deploy
 fi
 
-mv main ../deploy/
-yes | cp -rf src/conf  ../deploy/
+mv devops/main ../deploy/
+yes | cp -rf src/devops/conf  ../deploy/
 cd ../deploy
 ./main -mode=test
