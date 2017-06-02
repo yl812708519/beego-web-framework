@@ -4,7 +4,7 @@
 # 仅适用于本机的test发布。 不具有泛用性
 git pull
 
-GO15VENDOREXPERIMENT=1 go build main.go
+GO15VENDOREXPERIMENT=1 go build src/devops/main.go
 if [ ! -d "../deploy" ]; then
   mkdir ../deploy
 fi
