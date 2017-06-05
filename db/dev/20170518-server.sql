@@ -44,7 +44,7 @@ CREATE TABLE `servers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Create syntax for TABLE 'service'
-CREATE TABLE `services` (
+CREATE TABLE `servings` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(100) NOT NULL DEFAULT '' COMMENT '名称/标签',
   `application` varchar(100) NOT NULL DEFAULT '' COMMENT '应用',

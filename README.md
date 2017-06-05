@@ -1,6 +1,12 @@
 
 # 项目描述
 
+## 运行
+环境 go version go1.8.1,项目依赖使用vendor管理  
+当前没有通用启动脚本， 可以通过编译后生成的可执行文件运行  
+或者使用 beego 自带的bee工具执行,使用bee_run.sh 本地启动的且包含swagger
+
+
 ## 项目配置
 beego 虽然支持多个环境多分配置， 但是run-mode只能在编译前修改
 所以还是决定使用多个配置文件， 通过接收的run mode 参数加载不同的config
@@ -18,12 +24,15 @@ beego 虽然支持多个环境多分配置， 但是run-mode只能在编译前�
 * xsrf token 使用header：X-Xsrftoken 传递， 否则json 和delete方法无法解析
 
 
-##baseController
+## baseController
 这里封装了部分C层常用的方法， 有些与框架的基类重名， 重名方法使用小写字母， 反正是同包使用
 
+## router
+路由定义使用 控制器注释+namespace 否则无法使用 swagger， 优缺点并行吧。。。
+
 ## 参数处理
-框架提供的传入参数处理机制貌似不完善， 无法parse 嵌套对象(无法测试尚不明了)
-使用解析json的形式可以达到要求，性能应该不是最优解  
+框架提供的传入参数处理机制貌似不完善， 无法parse 嵌套对象
+使用解析json的形式可以达到要求
 form-data、x-www-form-urlencode 可以使用this.Ctx.Input() 接收    
 application/json 只能使用 this.Ctx.Input.RequestBody()获取并解析  
 
@@ -51,6 +60,7 @@ orm 部分未经过测试。。。。
 项目依赖使用golang 自带vendor管理
 > 编译之前请设置  export GO15VENDOREXPERIMENT=1
 
-
+# todo list
+xsrf token 不知道怎么搞， 前后端完全分离之后， 后端只提供接口， token 无法初始化啊。。。由前段初始化后端校验? 
 
 就这样。。。想到再补。。
